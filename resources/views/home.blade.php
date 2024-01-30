@@ -51,5 +51,8 @@
 
         <button type="submit">Uplati 1 tiket sa random brojevima</button>
     </form>
+    @if(session('errors'))
+    {{session('errors')->first()}}
+    @endif
 </body>
 </html>
