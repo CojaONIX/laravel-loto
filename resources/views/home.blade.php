@@ -10,6 +10,9 @@
 
 <body>
 
+    <h3>Name: {{ Auth::user()->name }}</h3>
+    <h3>Email: {{ Auth::user()->email }}</h3>
+
     <form method="post" action="/logout">
         @csrf
         <button type="submit">Logout</button>
