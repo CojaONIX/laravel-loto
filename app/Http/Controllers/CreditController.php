@@ -11,7 +11,7 @@ class CreditController extends Controller
     public function homeKredit()
     {
 
-        $kredits = Credit::all();
+        $kredits = Credit::where('user_id', Auth::user()->id)->get();
         return view('home', compact('kredits'));
     }
 
@@ -29,9 +29,9 @@ class CreditController extends Controller
 
     public function isplataSaKredita(Request $request)
     {
-        if(Credit::sum('amount') < $request->get('amount'))
+        if(Credit::where('user_id', Auth::user()->id)->sum('amount') < $request->get('amount'))
         {
-            return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za isplatu trazenog iznosa!']);;
+            return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za isplatu trazenog iznosa!']);
         }
         // validate: amount mora biti pozitivan
         Credit::create([
@@ -45,9 +45,9 @@ class CreditController extends Controller
 
     public function uplataTiketa(Request $request)
     {
-        if(Credit::sum('amount') < 100)
+        if(Credit::where('user_id', Auth::user()->id)->sum('amount') < 100)
         {
-            return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);;
+            return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);
         }
         // generisi slucajne brojeve u tabeli tikets
         Credit::create([
