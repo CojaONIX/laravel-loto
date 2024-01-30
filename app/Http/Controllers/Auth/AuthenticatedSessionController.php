@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+use App\Models\User;
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -17,7 +19,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        $users = User::all();
+        return view('auth.login', compact('users'));
     }
 
     /**

@@ -2,6 +2,13 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <ul>
+    @foreach($users as $user)
+        <li>{{ $user->email }}</li>
+    @endforeach
+    </ul>
+    <hr>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
