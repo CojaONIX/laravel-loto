@@ -18,13 +18,38 @@
         <button type="submit">Logout</button>
     </form>
 
+    <table>
+        <tr>
+            <th>id</th>
+            <th>type</th>
+            <th>amount</th>
+            <th>created_at</th>
+        </tr>
+
+        @foreach($kredits as $kredit)
+            <tr>
+                <th>{{ $kredit->id }}</th>
+                <th>{{ $kredit->type }}</th>
+                <th>{{ $kredit->amount }}</th>
+                <th>{{ $kredit->created_at }}</th>
+            </tr>
+        @endforeach
+    </table>
+
+    <h3>Kredit: {{ $kredits->pluck('amount')->sum() }}</h3>
+
     <nav>
         <ul>
-            <li><a href="{{ route('kredit.uplata') }}">Uplata kredita</a></li>
-            <li><a href="{{ route('kredit.isplata') }}">Isplata sa kredita</a></li>
-            <li><a href="{{ route('tiket.uplata') }}">Uplata tiketa</a></li>
-            <li><a href="{{ route('tiket.dobitak') }}">Dobitak</a></li>
+            <li><a href="{{ route('kredit.uplata.view') }}">Uplata kredita</a></li>
+            <li><a href="{{ route('kredit.isplata.view') }}">Isplata sa kredita</a></li>
+            <li><a href="{{ route('tiket.dobitak.view') }}">Isplata dobitka</a></li>
         </ul>
     </nav>
+
+    <form method="POST" action="{{ route('tiket.uplata') }}">
+        @csrf
+
+        <button type="submit">Uplati 1 tiket sa random brojevima</button>
+    </form>
 </body>
 </html>

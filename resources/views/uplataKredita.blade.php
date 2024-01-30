@@ -9,5 +9,13 @@
 </head>
 <body>
     <h2>Uplata Kredita</h2>
+
+    <form method="POST" action="{{ route('kredit.uplata') }}">
+        @csrf
+        <input type="text" id="amount" name="amount" placeholder="Iznos:" autofocus value="">
+        <label for="amount">Iznos:</label>
+
+        <button type="submit">Uplati</button>
+    </form>
 </body>
 </html>

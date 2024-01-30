@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CreditController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,11 +17,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::view('/', 'home');
-    Route::view('/uplata-kredita', 'uplataKredita')->name('kredit.uplata');
-    Route::view('/isplata-sa-kredita', 'ispaltaSaKredita')->name('kredit.isplata');
-    Route::view('/uplata-tiketa', 'uplataTiketa')->name('tiket.uplata');
-    Route::view('/isplata-dobitka', 'isplataDobitka')->name('tiket.dobitak');
+
+    Route::view('/uplata-kredita', 'uplataKredita')->name('kredit.uplata.view');
+    Route::view('/isplata-sa-kredita', 'ispaltaSaKredita')->name('kredit.isplata.view');
+    Route::view('/isplata-dobitka', 'isplataDobitka')->name('tiket.dobitak.view');
+
+    Route::controller(CreditController::class)->group(function () {
+        Route::get('/', 'homeKredit')->name('kredit.home');
+        Route::post('/uplata-kredita', 'uplataKredita')->name('kredit.uplata');
+        Route::post('/isplata-sa-kredita', 'isplataSaKredita')->name('kredit.isplata');
+        Route::post('/uplata-tiketa', 'uplataTiketa')->name('tiket.uplata');
+        Route::post('/isplata-dobitka', 'isplataDobitka')->name('tiket.dobitak');
+    });
 });
 
 Route::get('/welcome', function () {
