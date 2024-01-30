@@ -9,6 +9,12 @@
 </head>
 
 <body>
+
+    <form method="post" action="/logout">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
+
     <nav>
         <ul>
             <li><a href="{{ route('kredit.uplata') }}">Uplata kredita</a></li>
