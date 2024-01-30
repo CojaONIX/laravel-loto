@@ -14,7 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::middleware('auth')->group(function () {
+    Route::view('/', 'home');
+    Route::view('/uplata-kredita', 'uplataKredita')->name('kredit.uplata');
+    Route::view('/isplata-sa-kredita', 'ispaltaSaKredita')->name('kredit.isplata');
+    Route::view('/uplata-tiketa', 'uplataTiketa')->name('tiket.uplata');
+    Route::view('/isplata-dobitka', 'isplataDobitka')->name('tiket.dobitak');
+});
+
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
