@@ -26,17 +26,17 @@
             <th>created_at</th>
         </tr>
 
-        @foreach($kredits as $kredit)
+        @foreach($credits as $credit)
             <tr>
-                <th>{{ $kredit->id }}</th>
-                <th>{{ $kredit->type }}</th>
-                <th>{{ $kredit->amount }}</th>
-                <th>{{ $kredit->created_at }}</th>
+                <th>{{ $credit->id }}</th>
+                <th>{{ $credit->type }}</th>
+                <th>{{ $credit->amount }}</th>
+                <th>{{ $credit->created_at }}</th>
             </tr>
         @endforeach
     </table>
 
-    <h3>Kredit: {{ $kredits->pluck('amount')->sum() }}</h3>
+    <h3>Kredit: {{ $credits->pluck('amount')->sum() }}</h3>
 
     <nav>
         <ul>
@@ -46,6 +46,8 @@
         </ul>
     </nav>
 
+    <h3>Kolo: {{ $round }}</h3>
+    <h3>Vreme: {{ $date }}</h3>
     <form method="POST" action="{{ route('tiket.uplata') }}">
         @csrf
 

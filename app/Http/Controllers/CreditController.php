@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Credit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,9 +11,20 @@ class CreditController extends Controller
 {
     public function homeKredit()
     {
+        $credits = Credit::where('user_id', Auth::id())->get();
 
-        $kredits = Credit::where('user_id', Auth::user()->id)->get();
-        return view('home', compact('kredits'));
+        $roundStartsAt = [
+            'day' => 'Wednesday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+            'hour' => 22,
+            'minute' => 40
+        ];
+
+        $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
+        $firstRound->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
+        $round = $firstRound->diffInWeeks(Carbon::now()) + 1 + 1;
+
+        $date = $firstRound->addWeeks($round - 1)->addHour();
+        return view('home', compact('credits', 'round', 'date'));
     }
 
     public function uplataKredita(Request $request)
@@ -22,7 +34,7 @@ class CreditController extends Controller
         ]);
 
         Credit::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'type' => 0,
             'amount' => $request->get('amount')
         ]);
@@ -32,7 +44,7 @@ class CreditController extends Controller
 
     public function isplataSaKredita(Request $request)
     {
-        if(Credit::where('user_id', Auth::user()->id)->sum('amount') < $request->get('amount'))
+        if(Credit::where('user_id', Auth::id())->sum('amount') < $request->get('amount'))
         {
             return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za isplatu trazenog iznosa!']);
         }
@@ -42,7 +54,7 @@ class CreditController extends Controller
         ]);
 
         Credit::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'type' => 1,
             'amount' => -$request->get('amount')
         ]);
@@ -52,13 +64,13 @@ class CreditController extends Controller
 
     public function uplataTiketa(Request $request)
     {
-        if(Credit::where('user_id', Auth::user()->id)->sum('amount') < 100)
+        if(Credit::where('user_id', Auth::id())->sum('amount') < 100)
         {
             return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);
         }
         // generisi slucajne brojeve u tabeli tikets
         Credit::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'type' => 2,
             'amount' => -100 // cena tiketa
         ]);
@@ -73,7 +85,7 @@ class CreditController extends Controller
         ]);
 
         Credit::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'type' => 3,
             'amount' => $request->get('amount')
         ]);
