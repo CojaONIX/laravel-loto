@@ -17,7 +17,10 @@ class CreditController extends Controller
 
     public function uplataKredita(Request $request)
     {
-        // validate: amount mora biti pozitivan
+        $request->validate([
+            'amount' => 'required|numeric|min:0'
+        ]);
+
         Credit::create([
             'user_id' => Auth::user()->id,
             'type' => 0,
@@ -33,7 +36,11 @@ class CreditController extends Controller
         {
             return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za isplatu trazenog iznosa!']);
         }
-        // validate: amount mora biti pozitivan
+
+        $request->validate([
+            'amount' => 'required|numeric|min:0'
+        ]);
+
         Credit::create([
             'user_id' => Auth::user()->id,
             'type' => 1,
@@ -61,7 +68,10 @@ class CreditController extends Controller
 
     public function isplataDobitka(Request $request)
     {
-        // validate: amount mora biti pozitivan
+       $request->validate([
+            'amount' => 'required|numeric|min:0'
+        ]);
+
         Credit::create([
             'user_id' => Auth::user()->id,
             'type' => 3,

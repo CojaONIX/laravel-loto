@@ -17,7 +17,7 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->smallInteger('type');
+            $table->unsignedTinyInteger('type');
             $table->float('amount', 8, 2);
             $table->timestamps();
         });
