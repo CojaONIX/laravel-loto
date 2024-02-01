@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Credit;
+use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,9 @@ class CreditController extends Controller
         $round = $firstRound->diffInWeeks(Carbon::now()) + 1 + 1;
 
         $date = $firstRound->addWeeks($round - 1)->addHour();
-        return view('home', compact('credits', 'round', 'date'));
+
+        $ticketsNumber = Credit::where(['user_id' => Auth::id(), 'type' => 2])->count();
+        return view('home', compact('credits', 'round', 'date', 'ticketsNumber'));
     }
 
     public function uplataKredita(Request $request)
@@ -68,6 +71,12 @@ class CreditController extends Controller
         {
             return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);
         }
+
+        if(Credit::where(['user_id' => Auth::id(), 'type' => 2])->count() >= 5)
+        {
+            return redirect()->route('kredit.home')->withErrors(['message'=>'Ne mozete uplatiti vise od 5 tiketa po kolu!']);
+        }
+
         // generisi slucajne brojeve u tabeli tikets
         Credit::create([
             'user_id' => Auth::id(),

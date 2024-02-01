@@ -14,4 +14,14 @@ class Credit extends Model
         'type',
         'amount'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

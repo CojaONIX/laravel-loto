@@ -46,7 +46,7 @@
         </ul>
     </nav>
 
-    <h3>Kolo: {{ $round }}</h3>
+    <h3>Kolo: {{ $round }} - {{ $ticketsNumber }} tiketa</h3>
     <h3>Vreme: {{ $date }}</h3>
     <form method="POST" action="{{ route('tiket.uplata') }}">
         @csrf
