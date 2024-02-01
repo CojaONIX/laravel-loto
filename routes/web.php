@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CreditController;
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/isplata-dobitka', 'isplataDobitka')->name('tiket.dobitak');
     });
 });
+
+Route::get('/test', [TestController::class, 'showTest'])->name('test.page');
+Route::post('/test', [TestController::class, 'ajaxGetTestData']);
 
 Route::get('/welcome', function () {
     return view('welcome');

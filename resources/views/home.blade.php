@@ -4,12 +4,14 @@
 
 @section('content')
 
+    <a href="{{ route('test.page') }}" class="btn btn-outline-primary">Test Page</a>
+
     <h3>Name: {{ Auth::user()->name }}</h3>
     <h3>Email: {{ Auth::user()->email }}</h3>
 
     <form method="post" action="/logout">
         @csrf
-        <button type="submit">Logout</button>
+        <button type="submit" class="btn btn-outline-danger">Logout</button>
     </form>
 
     <table class="table">
@@ -45,7 +47,7 @@
     <form method="POST" action="{{ route('tiket.uplata') }}">
         @csrf
 
-        <button type="submit">Uplati 1 tiket sa random brojevima</button>
+        <button type="submit" class="btn btn-outline-primary">Uplati 1 tiket sa random brojevima</button>
     </form>
     @if(session('errors'))
         {{session('errors')->first()}}

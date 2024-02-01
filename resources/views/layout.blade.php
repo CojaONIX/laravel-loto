@@ -13,7 +13,7 @@
     <title>Loto - @yield('title')</title>
 </head>
 <body>
-
+{{--    @include('navigation')--}}
 
     <div class="container">
         <h1>@yield('title')</h1>
@@ -23,7 +23,7 @@
         <hr>
     </div>
 
-    @include('footer')
+{{--    @include('footer')--}}
 
     @yield('js')
 </body>

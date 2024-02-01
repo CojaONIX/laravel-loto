@@ -3,7 +3,7 @@
 @section('title', 'Isplata sa kredita')
 
 @section('content')
-    <a href="{{ route('kredit.home') }}">Home</a>
+    <a href="{{ route('kredit.home') }}" class="btn btn-outline-primary">Home</a>
 
     <h2>Isplata sa Kredita</h2>
 
