@@ -1,13 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Isplata Dobitka</title>
-</head>
-<body>
+@extends('layout')
+
+@section('title', 'Isplata Dobitka')
+
+@section('content')
     <a href="{{ route('kredit.home') }}">Home</a>
 
     <h2>Isplata Dobitka</h2>
@@ -29,5 +24,4 @@
 
         <button type="submit">Isplati Dobitak</button>
     </form>
-</body>
-</html>
+@endsection

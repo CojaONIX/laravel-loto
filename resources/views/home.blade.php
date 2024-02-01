@@ -1,14 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Loto</title>
-</head>
+@extends('layout')
 
-<body>
+@section('title', 'Home')
+
+@section('content')
 
     <h3>Name: {{ Auth::user()->name }}</h3>
     <h3>Email: {{ Auth::user()->email }}</h3>
@@ -18,7 +12,7 @@
         <button type="submit">Logout</button>
     </form>
 
-    <table>
+    <table class="table">
         <tr>
             <th>id</th>
             <th>type</th>
@@ -54,7 +48,8 @@
         <button type="submit">Uplati 1 tiket sa random brojevima</button>
     </form>
     @if(session('errors'))
-    {{session('errors')->first()}}
+        {{session('errors')->first()}}
     @endif
-</body>
-</html>
+
+@endsection
+
