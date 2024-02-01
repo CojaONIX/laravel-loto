@@ -15,9 +15,9 @@ class CreditController extends Controller
         $credits = Credit::where('user_id', Auth::id())->get();
 
         $roundStartsAt = [
-            'day' => 'Wednesday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-            'hour' => 22,
-            'minute' => 40
+            'day' => 'Thursday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+            'hour' => 13,
+            'minute' => 56
         ];
 
         $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
