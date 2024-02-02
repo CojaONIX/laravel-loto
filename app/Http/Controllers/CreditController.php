@@ -6,6 +6,7 @@ use App\Models\Credit;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class CreditController extends Controller
@@ -72,16 +73,12 @@ class CreditController extends Controller
             return redirect()->route('kredit.home')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);
         }
 
-        if(Credit::where(['user_id' => Auth::id(), 'type' => 2])->count() >= 5)
+        if(Credit::where(['user_id' => Auth::id(), 'type' => 2])->count() >= 50)
         {
             return redirect()->route('kredit.home')->withErrors(['message'=>'Ne mozete uplatiti vise od 5 tiketa po kolu!']);
         }
 
-        $numbers = [];
-        for($i=0; $i<5; $i++)
-        {
-            $numbers[] = rand(0, 9);
-        }
+        $numbers = Arr::random(range(0, 9), 5);
 
         $credit = Credit::create([
             'user_id' => Auth::id(),
