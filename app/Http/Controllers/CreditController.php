@@ -16,8 +16,8 @@ class CreditController extends Controller
 
         $roundStartsAt = [
             'day' => 'Thursday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-            'hour' => 13,
-            'minute' => 56
+            'hour' => 17,
+            'minute' => 18
         ];
 
         $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
@@ -77,11 +77,25 @@ class CreditController extends Controller
             return redirect()->route('kredit.home')->withErrors(['message'=>'Ne mozete uplatiti vise od 5 tiketa po kolu!']);
         }
 
-        // generisi slucajne brojeve u tabeli tikets
-        Credit::create([
+        $numbers = [];
+        for($i=0; $i<5; $i++)
+        {
+            $numbers[] = rand(0, 9);
+        }
+
+        $credit = Credit::create([
             'user_id' => Auth::id(),
             'type' => 2,
-            'amount' => -100 // cena tiketa
+            'amount' => -100
+        ]);
+
+        Ticket::create([
+            'credit_id' => $credit->id,
+            'year' => Carbon::now()->year,
+            'round' => 8,
+            'numbers' => $numbers,
+            'winning' => 0,
+            'paid' => false
         ]);
 
         return redirect()->route('kredit.home');

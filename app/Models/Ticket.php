@@ -13,13 +13,13 @@ class Ticket extends Model
         'credit_id',
         'year',
         'round',
-        'n1',
-        'n2',
-        'n3',
-        'n4',
-        'n5',
+        'numbers',
         'winning',
         'paid'
+    ];
+
+    protected $casts = [
+        'numbers' => 'array',
     ];
 
     public function credit()
