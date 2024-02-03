@@ -15,11 +15,7 @@ class GameController extends Controller
     {
         $credits = Credit::where('user_id', Auth::id())->get();
 
-        $roundStartsAt = [
-            'day' => 'Thursday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-            'hour' => 17,
-            'minute' => 18
-        ];
+        $roundStartsAt = config('loto.round');
 
         $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
         $firstRound->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
