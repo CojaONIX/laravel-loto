@@ -26,14 +26,14 @@ class TransactionsController extends Controller
             'amount' => $request->get('amount')
         ]);
 
-        return redirect()->route('game.view');
+        return redirect()->back();
     }
 
     public function withdrawCredit(Request $request)
     {
         if(Credit::where('user_id', Auth::id())->sum('amount') < $request->get('amount'))
         {
-            return redirect()->route('game.view')->withErrors(['message'=>'Nemate dovoljno kredita za isplatu trazenog iznosa!']);
+            return redirect()->back()->withErrors(['message'=>'Nemate dovoljno kredita za isplatu trazenog iznosa!']);
         }
 
         $request->validate([
@@ -46,21 +46,7 @@ class TransactionsController extends Controller
             'amount' => -$request->get('amount')
         ]);
 
-        return redirect()->route('game.view');
+        return redirect()->back();
     }
 
-    public function winnings(Request $request)
-    {
-        $request->validate([
-            'amount' => 'required|numeric|min:0'
-        ]);
-
-        Credit::create([
-            'user_id' => Auth::id(),
-            'type' => 3,
-            'amount' => $request->get('amount')
-        ]);
-
-        return redirect()->route('game.view');
-    }
 }

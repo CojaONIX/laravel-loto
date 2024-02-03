@@ -4,8 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\GameController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/transactions', 'index')->name('transactions.view');
         Route::post('/uplata-kredita', 'addCredit')->name('transactions.credit.add');
         Route::post('/isplata-sa-kredita', 'withdrawCredit')->name('transactions.credit.withdraw');
+    });
+
+    Route::controller(AdminController::class)->group(function () {
         Route::post('/isplata-dobitka', 'winnings')->name('transactions.credit.winnings');
     });
 
