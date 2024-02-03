@@ -3,8 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CreditController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\TransactionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,27 +18,34 @@ use App\Http\Controllers\TestController;
 |
 */
 
+Route::view('/', 'home')->name('home.view');
+Route::view('/welcome', 'welcome')->name('welcome.view');
+
 Route::middleware('auth')->group(function () {
 
-    Route::view('/uplata-kredita', 'uplataKredita')->name('kredit.uplata.view');
-    Route::view('/isplata-sa-kredita', 'ispaltaSaKredita')->name('kredit.isplata.view');
-    Route::view('/isplata-dobitka', 'isplataDobitka')->name('tiket.dobitak.view');
+    Route::view('/admin', 'admin')->name('admin.view');
 
-    Route::controller(CreditController::class)->group(function () {
-        Route::get('/', 'homeKredit')->name('kredit.home');
-        Route::post('/uplata-kredita', 'uplataKredita')->name('kredit.uplata');
-        Route::post('/isplata-sa-kredita', 'isplataSaKredita')->name('kredit.isplata');
-        Route::post('/uplata-tiketa', 'uplataTiketa')->name('tiket.uplata');
-        Route::post('/isplata-dobitka', 'isplataDobitka')->name('tiket.dobitak');
+    Route::controller(GameController::class)->group(function () {
+        Route::get('/game', 'index')->name('game.view');
+        Route::post('/uplata-tiketa', 'addTicket')->name('game.ticket.add');
+    });
+
+    Route::controller(TransactionsController::class)->group(function () {
+        Route::get('/transactions', 'index')->name('transactions.view');
+        Route::post('/uplata-kredita', 'addCredit')->name('transactions.credit.add');
+        Route::post('/isplata-sa-kredita', 'withdrawCredit')->name('transactions.credit.withdraw');
+        Route::post('/isplata-dobitka', 'winnings')->name('transactions.credit.winnings');
+    });
+
+    Route::controller(TestController::class)->group(function () {
+        Route::get('/test', 'showTest')->name('test.view');
+        Route::post('/test', 'ajaxGetTestData');
     });
 });
 
-Route::get('/test', [TestController::class, 'showTest'])->name('test.page');
-Route::post('/test', [TestController::class, 'ajaxGetTestData']);
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

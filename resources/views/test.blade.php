@@ -4,11 +4,12 @@
 
 @section('add_install')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+@endsection
 
+@section('add_css')
     <style>
         .query {
             cursor: pointer;
-
         }
         .query:hover {
             background-color: #ddd;
@@ -17,7 +18,7 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('kredit.home') }}" class="btn btn-outline-primary">Home</a>
+    <a href="{{ route('game.view') }}" class="btn btn-outline-primary">Home</a>
     <hr>
 
     <div class="d-flex justify-content-between flex-nowrap">

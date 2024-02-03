@@ -11,9 +11,11 @@
     @yield('add_install')
 
     <title>Loto - @yield('title')</title>
+
+    @yield('add_css')
 </head>
 <body>
-{{--    @include('navigation')--}}
+    @include('navigation')
 
     <div class="container">
         <h1>@yield('title')</h1>
