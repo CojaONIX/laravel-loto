@@ -12,7 +12,8 @@ class Credit extends Model
     protected $fillable = [
         'user_id',
         'type',
-        'amount'
+        'amount',
+        'ticket_id'
     ];
 
     public function user()
@@ -20,8 +21,8 @@ class Credit extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tickets()
+    public function ticket()
     {
-        return $this->hasMany(Ticket::class);
+        return $this->belongsTo(Ticket::class);
     }
 }

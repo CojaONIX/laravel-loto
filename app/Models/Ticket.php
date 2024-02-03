@@ -10,7 +10,6 @@ class Ticket extends Model
     protected $table = 'tickets';
 
     protected $fillable = [
-        'credit_id',
         'year',
         'round',
         'numbers',
@@ -24,6 +23,6 @@ class Ticket extends Model
 
     public function credit()
     {
-        return $this->belongsTo(Credit::class);
+        return $this->hasOne(Credit::class);
     }
 }

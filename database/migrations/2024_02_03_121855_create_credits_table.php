@@ -19,6 +19,11 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->unsignedTinyInteger('type');
             $table->float('amount', 8, 2);
+            $table->foreignId('ticket_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

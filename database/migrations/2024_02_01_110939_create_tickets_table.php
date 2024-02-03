@@ -13,10 +13,6 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('credit_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
             $table->year('year');
             $table->unsignedTinyInteger('round');
             $table->json('numbers')->nullable();;
