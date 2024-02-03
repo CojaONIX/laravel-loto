@@ -41,7 +41,7 @@ class GameController extends Controller
 
         if(Credit::where(['user_id' => Auth::id(), 'type' => 2])->count() >= 50)
         {
-            return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti vise od 5 tiketa po kolu!']);
+            return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti vise od 50 tiketa po kolu!']);
         }
 
         $numbers = Arr::random(range(0, 9), 5);

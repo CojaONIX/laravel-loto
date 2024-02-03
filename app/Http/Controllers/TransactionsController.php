@@ -10,7 +10,7 @@ class TransactionsController extends Controller
 {
     public function index()
     {
-        $credits = Credit::where('user_id', Auth::id())->get();
+        $credits = Credit::where('user_id', Auth::id())->orderByDesc('id')->paginate(10);
         return view('transactions', compact('credits'));
     }
 

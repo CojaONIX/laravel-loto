@@ -58,4 +58,5 @@
         @endforeach
     </table>
 
+    <div class="row">{{ $credits->links() }}</div>
 @endsection
