@@ -11,7 +11,8 @@ class TransactionsController extends Controller
     public function index()
     {
         $credits = Credit::where('user_id', Auth::id())->orderByDesc('id')->paginate(10);
-        return view('transactions', compact('credits'));
+        $creditsSum = Credit::where('user_id', Auth::id())->sum('amount');
+        return view('transactions', compact('credits', 'creditsSum'));
     }
 
     public function addCredit(Request $request)

@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <h3>Kredit: {{ $credits->pluck('amount')->sum() }}</h3>
+    <h3>Kredit: {{ $creditsSum }}</h3>
     @if ($errors->any())
         <div>
             <ul>

@@ -20,9 +20,6 @@
 
 @section('content')
 
-    <h3>Name: {{ Auth::user()->name }}</h3>
-    <h3>Email: {{ Auth::user()->email }}</h3>
-
     <h3>Kredit: {{ $creditsSum }}</h3>
     <h3>Kolo: {{ $nextRound['round'] }} - {{ count($tickets) }} tiketa</h3>
     <h3>Vreme: {{ $nextRound['date'] }}</h3>
