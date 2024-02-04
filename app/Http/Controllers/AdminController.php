@@ -3,23 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Credit;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function winnings(Request $request)
+    public function index()
     {
-        $request->validate([
-            'amount' => 'required|numeric|min:0'
-        ]);
+        $rounds = Ticket::select('round')->distinct()->get()->pluck('round');
+        return view('admin', compact('rounds'));
+    }
 
-        Credit::create([
-            'user_id' => Auth::id(),
-            'type' => 3,
-            'amount' => $request->get('amount')
-        ]);
-
-        return redirect()->route('transactions.view');
+    public function ajaxAdminReport(Request $request)
+    {
+        $round = $request->get('round');
+        $ticketsCount = Ticket::where(['round' => $round])->count();
+        $ticketsValue = $ticketsCount * 100;
+        $quotas = config('loto.quotas');
+        return compact('round', 'ticketsCount', 'ticketsValue', 'quotas');
     }
 }

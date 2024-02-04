@@ -18,8 +18,6 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('game.view') }}" class="btn btn-outline-primary">Home</a>
-    <hr>
 
     <div class="d-flex justify-content-between flex-nowrap">
         <ul class="nav nav-pills flex-column col-2" id="menu">

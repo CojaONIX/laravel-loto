@@ -24,8 +24,6 @@ Route::view('/welcome', 'welcome')->name('welcome.view');
 
 Route::middleware('auth')->group(function () {
 
-    Route::view('/admin', 'admin')->name('admin.view');
-
     Route::controller(GameController::class)->group(function () {
         Route::get('/game', 'index')->name('game.view');
         Route::post('/uplata-tiketa', 'addTicket')->name('game.ticket.add');
@@ -38,7 +36,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(AdminController::class)->group(function () {
-        Route::post('/isplata-dobitka', 'winnings')->name('transactions.credit.winnings');
+        Route::get('/admin', 'index')->name('admin.view');
+        Route::post('/admin/report', 'ajaxAdminReport');
+
     });
 
     Route::controller(TestController::class)->group(function () {
