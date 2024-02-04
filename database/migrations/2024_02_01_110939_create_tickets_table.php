@@ -17,8 +17,7 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->year('year');
-            $table->unsignedTinyInteger('round');
+            $table->string('round', 9);
             $table->json('numbers')->nullable();;
             $table->unsignedFloat('winning', 8, 2);
             $table->boolean('paid');

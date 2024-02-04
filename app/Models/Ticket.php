@@ -12,7 +12,6 @@ class Ticket extends Model
 
     protected $fillable = [
         'user_id',
-        'year',
         'round',
         'numbers',
         'winning',

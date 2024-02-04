@@ -17,8 +17,9 @@ class GameController extends Controller
         $creditsSum = Credit::where('user_id', Auth::id())->sum('amount');
 
         $nextRound = Ticket::nextRound();
+        $round = $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT);
 
-        $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $nextRound['round']])->get();
+        $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $round])->get();
         return view('game', compact('creditsSum', 'nextRound', 'tickets'));
     }
 
@@ -47,8 +48,7 @@ class GameController extends Controller
 
         Ticket::create([
             'user_id' => Auth::id(),
-            'year' => Carbon::now()->year,
-            'round' => $nextRound['round'],
+            'round' => $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT),
             'numbers' => $numbers,
             'winning' => 0,
             'paid' => false

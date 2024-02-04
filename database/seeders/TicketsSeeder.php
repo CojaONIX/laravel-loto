@@ -48,8 +48,7 @@ class TicketsSeeder extends Seeder
 
                 Ticket::create([
                     'user_id' => $user_id,
-                    'year' => Carbon::now()->year,
-                    'round' => $round,
+                    'round' => '2000-' . str_pad($round, 4, "0", STR_PAD_LEFT),
                     'numbers' => $numbers,
                     'winning' => 0,
                     'paid' => false
