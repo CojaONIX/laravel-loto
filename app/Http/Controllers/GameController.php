@@ -13,9 +13,9 @@ class GameController extends Controller
 {
     public function index()
     {
-        $credits = Credit::where('user_id', Auth::id())->get();
+        $creditsSum = Credit::where('user_id', Auth::id())->sum('amount');
 
-        $roundStartsAt = config('loto.round');
+        $roundStartsAt = config('loto.round');  // /config/loto.php
 
         $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
         $firstRound->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
@@ -24,7 +24,7 @@ class GameController extends Controller
         $date = $firstRound->addWeeks($round - 1)->addHour();
 
         $ticketsNumber = Credit::where(['user_id' => Auth::id(), 'type' => 2])->count();
-        return view('game', compact('credits', 'round', 'date', 'ticketsNumber'));
+        return view('game', compact('creditsSum', 'round', 'date', 'ticketsNumber'));
     }
 
 

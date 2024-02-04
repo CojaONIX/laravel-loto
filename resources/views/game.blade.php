@@ -7,7 +7,7 @@
     <h3>Name: {{ Auth::user()->name }}</h3>
     <h3>Email: {{ Auth::user()->email }}</h3>
 
-    <h3>Kredit: {{ $credits->pluck('amount')->sum() }}</h3>
+    <h3>Kredit: {{ $creditsSum }}</h3>
     <h3>Kolo: {{ $round }} - {{ $ticketsNumber }} tiketa</h3>
     <h3>Vreme: {{ $date }}</h3>
     <form method="POST" action="{{ route('game.ticket.add') }}">

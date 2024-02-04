@@ -17,8 +17,8 @@ class TestController extends Controller
             'users',
             'user by id',
             'logged user',
-            'logged user with credits',
-            'logged user with tickets',
+            'logged user with all',
+            'logged user tickets',
 
         ]]);
     }
@@ -41,15 +41,15 @@ class TestController extends Controller
                         'Try with' => User::all()->pluck('id')
                     ];
                 }
+
             case('logged user'):
                 return Auth::user();
 
-            case('logged user with credits'):
-                //return Auth::user()->with('credits')->get();
-                return User::with('credits')->find(Auth::id());
+            case('logged user with all'):
+                return User::with('credits')->with('tickets')->find(Auth::id());
 
-            case('logged user with tickets'):
-                return Credit::find(2)->ticket()->get();
+            case('logged user tickets'):
+                return User::find(Auth::id())->tickets()->get();
 
 
             default:
