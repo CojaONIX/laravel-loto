@@ -16,32 +16,23 @@ class GameController extends Controller
     {
         $creditsSum = Credit::where('user_id', Auth::id())->sum('amount');
 
-        $roundStartsAt = config('loto.round');  // /config/loto.php
+        $nextRound = Ticket::nextRound();
 
-        $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
-        $firstRound->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
-        $round = $firstRound->diffInWeeks(Carbon::now()) + 1 + 1;
-
-        $date = $firstRound->addWeeks($round - 1)->addHour();
-
-        $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $round])->get();
-        return view('game', compact('creditsSum', 'round', 'date', 'tickets'));
+        $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $nextRound['round']])->get();
+        return view('game', compact('creditsSum', 'nextRound', 'tickets'));
     }
 
 
     public function addTicket(Request $request)
     {
-        $roundStartsAt = config('loto.round');  // /config/loto.php
-        $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
-        $firstRound->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
-        $round = $firstRound->diffInWeeks(Carbon::now()) + 1 + 1;
+        $nextRound = Ticket::nextRound();
 
         if(Credit::where('user_id', Auth::id())->sum('amount') < 100)
         {
             return redirect()->route('game.view')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);
         }
 
-        if(Credit::where(['user_id' => Auth::id(), 'type' => 2, 'round' => $round])->count() >= 50)
+        if(Credit::where(['user_id' => Auth::id(), 'type' => 2, 'round' => $nextRound['round']])->count() >= 50)
         {
             return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti vise od 50 tiketa po kolu!']);
         }
@@ -57,7 +48,7 @@ class GameController extends Controller
         Ticket::create([
             'user_id' => Auth::id(),
             'year' => Carbon::now()->year,
-            'round' => $round,
+            'round' => $nextRound['round'],
             'numbers' => $numbers,
             'winning' => 0,
             'paid' => false

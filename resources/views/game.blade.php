@@ -24,8 +24,8 @@
     <h3>Email: {{ Auth::user()->email }}</h3>
 
     <h3>Kredit: {{ $creditsSum }}</h3>
-    <h3>Kolo: {{ $round }} - {{ count($tickets) }} tiketa</h3>
-    <h3>Vreme: {{ $date }}</h3>
+    <h3>Kolo: {{ $nextRound['round'] }} - {{ count($tickets) }} tiketa</h3>
+    <h3>Vreme: {{ $nextRound['date'] }}</h3>
     <form method="POST" action="{{ route('game.ticket.add') }}">
         @csrf
 

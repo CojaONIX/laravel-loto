@@ -17,13 +17,10 @@ class TicketsSeeder extends Seeder
      */
     public function run(): void
     {
-        $roundStartsAt = config('loto.round');  // /config/loto.php
-        $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
-        $firstRound->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
-        $round = $firstRound->diffInWeeks(Carbon::now()) + 1 + 1;
+        $nextRound = Ticket::nextRound();
 
         $console = $this->command->getOutput();
-        $round = $console->ask('Za koje kolo zelite tikete?', $round);
+        $round = $console->ask('Za koje kolo zelite tikete?', $nextRound['round']);
         $min = $console->ask('Minimalno tiketa po igracu?', 10);
         $max = $console->ask('Maximalno tiketa po igracu?', 20);
 
