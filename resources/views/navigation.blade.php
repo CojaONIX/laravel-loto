@@ -34,7 +34,7 @@
                     <a class="nav-link" href="{{ route('test.view') }}">Test</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.view') }}">Admin</a>
+                    <a class="nav-link" href="{{ route('admin.view', ['round' => 'page']) }}">Admin</a>
                 </li>
             </ul>
 

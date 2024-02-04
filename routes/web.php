@@ -36,8 +36,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(AdminController::class)->group(function () {
-        Route::get('/admin', 'index')->name('admin.view');
-        Route::post('/admin/report', 'ajaxAdminReport');
+        Route::get('/admin/report/{round}', 'index')->name('admin.view');
+        Route::post('/admin/roll', 'rollNumbers')->name('admin.roll');
 
     });
 
