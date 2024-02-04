@@ -22,8 +22,9 @@ class Ticket extends Model
         'numbers' => 'array',
     ];
 
-    public function credit()
+    public function user()
     {
-        return $this->hasOne(Credit::class);
+        return $this->belongsTo(User::class);
     }
+
 }
