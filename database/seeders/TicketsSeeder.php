@@ -17,8 +17,13 @@ class TicketsSeeder extends Seeder
      */
     public function run(): void
     {
+        $roundStartsAt = config('loto.round');  // /config/loto.php
+        $firstRound = new Carbon( "first {$roundStartsAt['day']} of January");
+        $firstRound->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
+        $round = $firstRound->diffInWeeks(Carbon::now()) + 1 + 1;
+
         $console = $this->command->getOutput();
-        $round = $console->ask('Za koje kolo zelite tikete?', 99);
+        $round = $console->ask('Za koje kolo zelite tikete?', $round);
         $min = $console->ask('Minimalno tiketa po igracu?', 10);
         $max = $console->ask('Maximalno tiketa po igracu?', 20);
 
@@ -36,7 +41,7 @@ class TicketsSeeder extends Seeder
 
             for($i=0; $i<$ticketsCount; $i++)
             {
-                $numbers = Arr::random(range(0, 9), 5);
+                $numbers = Arr::random(range(1, 10), 5);
 
                 Credit::create([
                     'user_id' => $user_id,

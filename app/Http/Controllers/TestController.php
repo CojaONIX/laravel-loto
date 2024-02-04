@@ -49,7 +49,7 @@ class TestController extends Controller
                 return User::with('credits')->with('tickets')->find(Auth::id());
 
             case('logged user tickets'):
-                return User::find(Auth::id())->tickets()->get();
+                return User::find(Auth::id())->tickets()->where(['round' => 99])->get();
 
 
             default:
