@@ -13,7 +13,6 @@ class Credit extends Model
         'user_id',
         'type',
         'amount',
-        'ticket_id'
     ];
 
     public function user()

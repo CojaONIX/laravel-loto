@@ -37,7 +37,15 @@ class TicketsSeeder extends Seeder
             for($i=0; $i<$ticketsCount; $i++)
             {
                 $numbers = Arr::random(range(0, 9), 5);
-                $ticket = Ticket::create([
+
+                Credit::create([
+                    'user_id' => $user_id,
+                    'type' => 2,
+                    'amount' => -100,
+                ]);
+
+                Ticket::create([
+                    'user_id' => $user_id,
                     'year' => Carbon::now()->year,
                     'round' => $round,
                     'numbers' => $numbers,
@@ -45,15 +53,8 @@ class TicketsSeeder extends Seeder
                     'paid' => false
                 ]);
 
-                Credit::create([
-                    'user_id' => $user_id,
-                    'type' => 2,
-                    'amount' => -100,
-                    'ticket_id' => $ticket->id
-                ]);
             }
         }
-
 
         $console->info("Kreitano je $ticketsSum tiketa");
 

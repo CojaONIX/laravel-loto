@@ -42,22 +42,20 @@ class GameController extends Controller
 
         $numbers = Arr::random(range(0, 9), 5);
 
+        Credit::create([
+            'user_id' => Auth::id(),
+            'type' => 2,
+            'amount' => -100
+        ]);
 
-        $ticket = Ticket::create([
+        Ticket::create([
+            'user_id' => Auth::id(),
             'year' => Carbon::now()->year,
             'round' => 8,
             'numbers' => $numbers,
             'winning' => 0,
             'paid' => false
         ]);
-
-        Credit::create([
-            'user_id' => Auth::id(),
-            'type' => 2,
-            'amount' => -100,
-            'ticket_id' => $ticket->id
-        ]);
-
 
         return redirect()->route('game.view');
     }

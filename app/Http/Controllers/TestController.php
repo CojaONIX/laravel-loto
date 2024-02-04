@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Credit;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -17,6 +18,7 @@ class TestController extends Controller
             'user by id',
             'logged user',
             'logged user with credits',
+            'logged user with tickets',
 
         ]]);
     }
@@ -45,6 +47,9 @@ class TestController extends Controller
             case('logged user with credits'):
                 //return Auth::user()->with('credits')->get();
                 return User::with('credits')->find(Auth::id());
+
+            case('logged user with tickets'):
+                return Credit::find(2)->ticket()->get();
 
 
             default:
