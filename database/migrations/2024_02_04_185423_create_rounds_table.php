@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('rounds', function (Blueprint $table) {
             $table->id();
-            $table->string('round', 9);
+            $table->string('round', 9)->unique();
             $table->json('numbers');
             $table->float('bank', 8 ,2);
+            $table->float('transfer', 8 ,2);
             $table->timestamps();
         });
     }

@@ -49,9 +49,7 @@ class GameController extends Controller
         Ticket::create([
             'user_id' => Auth::id(),
             'round' => $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT),
-            'numbers' => $numbers,
-            'winning' => 0,
-            'paid' => false
+            'numbers' => $numbers
         ]);
 
         return redirect()->route('game.view');

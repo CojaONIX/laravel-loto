@@ -14,7 +14,7 @@ class Ticket extends Model
         'user_id',
         'round',
         'numbers',
-        'winning',
+        'win',
         'paid'
     ];
 
