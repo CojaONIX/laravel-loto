@@ -17,18 +17,39 @@ class AdminController extends Controller
         if($round == 'page') {
             return view('admin', compact('rounds', 'round'));
         }
+        $report['rounds'] = $rounds;
 
         $ticketsCount = Ticket::where(['round' => $round])->count();
         $ticketsValue = $ticketsCount * 100;
-        $quotas = config('loto.quotas');
-        $isRoundOld = Round::where(['round' => $round])->select('created_at')->first();
-        return view('admin', compact('rounds','round', 'ticketsCount', 'ticketsValue', 'quotas', 'isRoundOld'));
+
+        $report['round'] = $round;
+        $report['ticketsCount'] = Ticket::where(['round' => $round])->count();
+        $report['ticketsValue'] = $report['ticketsCount'] * 100;
+
+        $b = config('loto.bank');
+        $report['bank']['percentage'] = $b;
+        $report['bank']['value'] = $ticketsValue / 100 * $b;
+
+        $funds = config('loto.funds');
+        foreach ($funds as $k => $v)
+        {
+            $report['wins'][$k]['percentage'] = $v;
+            $report['wins'][$k]['value'] = $ticketsValue / 100 * $v;
+        }
+
+        $report['played'] = Round::where(['round' => $round])->select('created_at')->first();
+
+        $lastRound = Round::latest('id')->first();
+        $transfer = $lastRound ? $lastRound->transfer : 0;
+        $report['transfer'] = 1000; //$transfer;
+
+        return view('admin', compact('report'));
     }
 
     public function rollNumbers(Request $request)
     {
         $lastRound = Round::latest('id')->first();
-        $transfer = 1000; // $lastRound ? $lastRound->transfer : 0; // vrednost prenetog fonda iz prethodnog kola
+        $transfer = $lastRound ? $lastRound->transfer : 0; // vrednost prenetog fonda iz prethodnog kola
 
         $tickets = Ticket::where(['round' => $request->get('round')])->get();
         $numbers = Arr::random(range(1, 10), 5);
@@ -38,7 +59,7 @@ class AdminController extends Controller
         }
 
         $wins = array_count_values($tickets->pluck('win')->toArray());
-        $paids = Arr::except(config('loto.quotas'), ['bank']);
+        $paids = config('loto.funds');
         foreach($paids as $k => $v)
         {
             $paids[$k] = (count($tickets) * 100) / 100 * $v; // fond dobitka
@@ -64,7 +85,7 @@ class AdminController extends Controller
             $ticket->paid = isset($paids[$ticket->win]) ? $paids[$ticket->win] : 0;
             $ticket->save();
 
-            if($ticket->paid > 0) {
+            if($ticket->paid > 0) { // Isplata dobitnicima
                 Credit::create([
                     'user_id' => $ticket->user_id,
                     'type' => 3,
@@ -79,8 +100,6 @@ class AdminController extends Controller
 //            'bank' => $request->get('bank'),
 //            'transfer' => $transfer
 //        ]);
-
-
 
         return redirect()->route('admin.view', ['round' => $request->get('round')]);
     }
