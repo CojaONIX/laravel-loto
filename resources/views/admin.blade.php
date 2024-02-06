@@ -23,7 +23,7 @@
     <div class="d-flex justify-content-between flex-nowrap">
         <ul class="nav nav-pills flex-column col-2" id="menu">
             @foreach ($rounds as $r)
-                <li class="round nav-link p-1"><a class="btn btn-outline-primary {{ $rounds == $r ? 'active' : '' }}" href="{{ route('admin.view', ['round' => $r]) }}">{{ $r }}</a></li>
+                <li class="round nav-link p-1"><a class="btn btn-outline-primary {{ $round == $r ? 'active' : '' }}" href="{{ route('admin.view', ['round' => $r]) }}">{{ $r }}</a></li>
             @endforeach
         </ul>
         <div class="" id="report">
@@ -76,7 +76,7 @@
         </div>
 
         <hr>
-        @if($report['played'])
+        @isset($report['played'])
             <div class="row">
                 <div class="ticket mb-4">
                     @for($i=1; $i<=10; $i++)
@@ -104,10 +104,10 @@
         @else
             <form method="POST" action="{{ route('admin.roll') }}">
                 @csrf
-                <input type="hidden" name="round" value="{{ $report['round'] }}">
+                <input type="hidden" name="round" value="{{ $round }}">
                 <button type="submit" class="btn btn-outline-primary">Izvlacenje brojeva</button>
             </form>
-        @endif
+        @endisset
 
 
     </div>

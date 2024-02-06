@@ -14,15 +14,16 @@ class AdminController extends Controller
     public function index($round)
     {
         $rounds = Ticket::select('round')->distinct()->get()->pluck('round');
+
         if($round == 'page') {
             return view('admin', compact('rounds', 'round'));
         }
-        $report['rounds'] = $rounds;
 
+        $report['rounds'] = $rounds;
+        $report['round'] = $round;
         $ticketsCount = Ticket::where(['round' => $round])->count();
         $ticketsValue = $ticketsCount * 100;
 
-        $report['round'] = $round;
         $report['ticketsCount'] = Ticket::where(['round' => $round])->count();
         $report['ticketsValue'] = $report['ticketsCount'] * 100;
 
@@ -39,11 +40,20 @@ class AdminController extends Controller
 
         $report['played'] = Round::where(['round' => $round])->first();
 
-        $lastRound = Round::latest('id')->first();
-        $transfer = $lastRound ? $lastRound->transfer : 0;
+        if($report['played'])
+        {
+            $transfer = $report['played']['transfer'];
+        }
+        else
+        {
+            $lastRound = Round::latest('id')->first();
+            $transfer = $lastRound ? $lastRound->transfer : 0;
+        }
+
+
         $report['transfer'] = $transfer;
 
-        return view('admin', compact('report', 'rounds'));
+        return view('admin', compact('report', 'rounds', 'round'));
     }
 
     public function rollNumbers(Request $request)
