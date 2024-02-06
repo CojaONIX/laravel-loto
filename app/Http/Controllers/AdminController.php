@@ -37,13 +37,13 @@ class AdminController extends Controller
             $report['wins'][$k]['value'] = $ticketsValue / 100 * $v;
         }
 
-        $report['played'] = Round::where(['round' => $round])->select('created_at')->first();
+        $report['played'] = Round::where(['round' => $round])->first();
 
         $lastRound = Round::latest('id')->first();
         $transfer = $lastRound ? $lastRound->transfer : 0;
-        $report['transfer'] = 1000; //$transfer;
+        $report['transfer'] = $transfer;
 
-        return view('admin', compact('report'));
+        return view('admin', compact('report', 'rounds'));
     }
 
     public function rollNumbers(Request $request)
@@ -72,11 +72,15 @@ class AdminController extends Controller
 
             if(isset($wins[$k]))
             {
-                $paids[$k] = number_format($paids[$k] / $wins[$k], 2); // vrednost dobitka ako postoji
+                $paids[$k] = round($paids[$k] / $wins[$k], 2); // vrednost dobitka ako postoji
+                $report[$k]['wins'] = $wins[$k];
+                $report[$k]['value'] = $paids[$k];
             }
             else
             {
                 $transfer += $paids[$k]; // prenosni fond u sledece kolo ako dobitak ne postoji
+                $report[$k]['wins'] = 0;
+                $report[$k]['value'] = 0;
             }
         }
 
@@ -94,12 +98,14 @@ class AdminController extends Controller
             }
         }
 
-//        Round::create([
-//            'round' => $request->get('round'),
-//            'numbers' => $numbers,
-//            'bank' => $request->get('bank'),
-//            'transfer' => $transfer
-//        ]);
+
+        Round::create([
+            'round' => $request->get('round'),
+            'numbers' => $numbers,
+            'report' => $report,
+            'bank' => (count($tickets) * 100) / 100 * config('loto.bank'),
+            'transfer' => $transfer
+        ]);
 
         return redirect()->route('admin.view', ['round' => $request->get('round')]);
     }

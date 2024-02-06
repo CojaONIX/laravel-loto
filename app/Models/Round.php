@@ -12,10 +12,13 @@ class Round extends Model
     protected $fillable = [
         'round',
         'numbers',
-        'bank'
+        'report',
+        'bank',
+        'transfer'
     ];
 
     protected $casts = [
         'numbers' => 'array',
+        'report' => 'array',
     ];
 }
