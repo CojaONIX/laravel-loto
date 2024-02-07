@@ -23,13 +23,17 @@
     <h3>Kredit: {{ $creditsSum }}</h3>
     <h3>Kolo: {{ $nextRound['round'] }} - {{ count($tickets) }} tiketa</h3>
     <h3>Vreme: {{ $nextRound['date'] }}</h3>
-    <form method="POST" action="{{ route('game.ticket.add') }}">
-        @csrf
+    @if($isPlayed)
+        <h3>Odigrano: {{ $isPlayed->created_at }}</h3>
+    @else
+        <form method="POST" action="{{ route('game.ticket.add') }}">
+            @csrf
 
-        <button type="submit" class="btn btn-outline-primary">Uplati 1 tiket sa random brojevima</button>
-    </form>
-    @if(session('errors'))
-        {{session('errors')->first()}}
+            <button type="submit" class="btn btn-outline-primary">Uplati 1 tiket sa random brojevima</button>
+        </form>
+        @if(session('errors'))
+            {{session('errors')->first()}}
+        @endif
     @endif
 
     <hr>

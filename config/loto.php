@@ -2,9 +2,9 @@
 
 return [
     'round' => [
-        'day' => 'Saturday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-        'hour' => 23,
-        'minute' => 15
+        'day' => 'Wednesday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+        'hour' => 13,
+        'minute' => 29
     ],
     'bank' => 10,
     'funds' => [

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Credit;
+use App\Models\Round;
 use App\Models\Ticket;
 use App\Models\User;
 use Carbon\Carbon;
@@ -19,8 +20,10 @@ class GameController extends Controller
         $nextRound = Ticket::nextRound();
         $round = $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT);
 
+        $isPlayed = Round::select('created_at')->where('round', $round)->first();
+
         $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $round])->get();
-        return view('game', compact('creditsSum', 'nextRound', 'tickets'));
+        return view('game', compact('creditsSum', 'nextRound', 'tickets', 'isPlayed'));
     }
 
 
