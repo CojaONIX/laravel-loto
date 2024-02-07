@@ -29,7 +29,6 @@
 
         <div class="col-md-10 row" id="report">
 
-
             @isset($report)
                 <div class="col-md-4">
                     <table class="table">
@@ -125,10 +124,7 @@
 
         </div>
 
-
     </div>
-
-
 
 @endsection
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatisticController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\GameController;
@@ -38,7 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::controller(AdminController::class)->group(function () {
         Route::get('/admin/report/{round}', 'index')->name('admin.view');
         Route::post('/admin/roll', 'rollNumbers')->name('admin.roll');
+    });
 
+    Route::controller(StatisticController::class)->group(function () {
+        Route::get('/statistic/{round}', 'index')->name('statistic.view');
     });
 
     Route::controller(TestController::class)->group(function () {
