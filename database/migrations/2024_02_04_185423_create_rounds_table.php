@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('round', 9)->unique();
             $table->json('numbers');
             $table->json('report');
-            $table->float('bank', 8 ,2);
-            $table->float('transfer', 8 ,2);
+            $table->float('bank');
+            $table->float('fundIN');
+            $table->float('fundOUT');
             $table->timestamps();
         });
     }

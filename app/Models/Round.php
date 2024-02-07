@@ -14,7 +14,8 @@ class Round extends Model
         'numbers',
         'report',
         'bank',
-        'transfer'
+        'fundIN',
+        'fundOUT'
     ];
 
     protected $casts = [

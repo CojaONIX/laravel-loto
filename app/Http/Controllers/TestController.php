@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Credit;
+use App\Models\Round;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -19,6 +20,7 @@ class TestController extends Controller
             'logged user',
             'logged user with all',
             'logged user tickets',
+            '2 latest',
 
         ]]);
     }
@@ -50,6 +52,9 @@ class TestController extends Controller
 
             case('logged user tickets'):
                 return User::find(Auth::id())->tickets()->where(['round' => 99])->get();
+
+            case('2 latest'):
+                return Round::latest('id')->take(2)->get()[1];
 
 
             default:

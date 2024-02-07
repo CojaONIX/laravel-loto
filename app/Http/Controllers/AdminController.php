@@ -13,14 +13,12 @@ class AdminController extends Controller
 {
     public function index($round)
     {
+        // Menu Buttons
         $rounds = Ticket::select('round')->distinct()->get()->pluck('round');
-
         if($round == 'page') {
             return view('admin', compact('rounds', 'round'));
         }
 
-        $report['rounds'] = $rounds;
-        $report['round'] = $round;
         $ticketsCount = Ticket::where(['round' => $round])->count();
         $ticketsValue = $ticketsCount * 100;
 
@@ -42,16 +40,15 @@ class AdminController extends Controller
 
         if($report['played'])
         {
-            $transfer = $report['played']['transfer'];
+            $report['fundIN'] = $report['played']['fundIN'];
+            $report['fundOUT'] = $report['played']['fundOUT'];
         }
         else
         {
             $lastRound = Round::latest('id')->first();
-            $transfer = $lastRound ? $lastRound->transfer : 0;
+            $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
+            $report['fundOUT'] = null;
         }
-
-
-        $report['transfer'] = $transfer;
 
         return view('admin', compact('report', 'rounds', 'round'));
     }
@@ -59,7 +56,7 @@ class AdminController extends Controller
     public function rollNumbers(Request $request)
     {
         $lastRound = Round::latest('id')->first();
-        $transfer = $lastRound ? $lastRound->transfer : 0; // vrednost prenetog fonda iz prethodnog kola
+        $fundIN = $lastRound ? $lastRound->fundOUT : 0; // vrednost prenetog fonda iz prethodnog kola
 
         $tickets = Ticket::where(['round' => $request->get('round')])->get();
         $numbers = Arr::random(range(1, 10), 5);
@@ -70,14 +67,14 @@ class AdminController extends Controller
 
         $wins = array_count_values($tickets->pluck('win')->toArray());
         $paids = config('loto.funds');
+        $fundOUT = 0;
         foreach($paids as $k => $v)
         {
             $paids[$k] = (count($tickets) * 100) / 100 * $v; // fond dobitka
 
             if($k == max(array_keys($paids)))
             {
-                $paids[$k] += $transfer; // transfer prenetog fonda maksimalnom dobitku
-                $transfer = 0;
+                $paids[$k] += $fundIN; // transfer prenetog fonda maksimalnom dobitku
             }
 
             if(isset($wins[$k]))
@@ -88,7 +85,7 @@ class AdminController extends Controller
             }
             else
             {
-                $transfer += $paids[$k]; // prenosni fond u sledece kolo ako dobitak ne postoji
+                $fundOUT += $paids[$k]; // prenosni fond u sledece kolo ako dobitak ne postoji
                 $report[$k]['wins'] = 0;
                 $report[$k]['value'] = 0;
             }
@@ -114,7 +111,8 @@ class AdminController extends Controller
             'numbers' => $numbers,
             'report' => $report,
             'bank' => (count($tickets) * 100) / 100 * config('loto.bank'),
-            'transfer' => $transfer
+            'fundIN' => $fundIN,
+            'fundOUT' => $fundOUT
         ]);
 
         return redirect()->route('admin.view', ['round' => $request->get('round')]);
