@@ -38,7 +38,8 @@ class Ticket extends Model
 
         return [
             'round' => $round,
-            'date' => $date
+            'date' => $date,
+            'date-round' => $date->year . '-' . str_pad($round, 4, "0", STR_PAD_LEFT)
         ];
     }
 

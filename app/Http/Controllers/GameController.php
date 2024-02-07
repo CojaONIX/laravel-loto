@@ -18,19 +18,17 @@ class GameController extends Controller
         $creditsSum = Credit::where('user_id', Auth::id())->sum('amount');
 
         $nextRound = Ticket::nextRound();
-        $round = $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT);
 
-        $isPlayed = Round::select('created_at')->where('round', $round)->first();
+        $isPlayed = Round::select('created_at')->where('round', $nextRound['date-round'])->first();
 
-        $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $round])->get();
+        $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $nextRound['date-round']])->get();
         return view('game', compact('creditsSum', 'nextRound', 'tickets', 'isPlayed'));
     }
 
 
     public function addTicket(Request $request)
     {
-        $nextRound = Ticket::nextRound();
-        $round = $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT);
+        $round = Ticket::nextRound()['date-round'];
 
         if(Credit::where('user_id', Auth::id())->sum('amount') < 100)
         {
@@ -42,8 +40,7 @@ class GameController extends Controller
             return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti vise od 50 tiketa po kolu!']);
         }
 
-        $isPlayed = Round::select('created_at')->where('round', $round)->first();
-        if($isPlayed)
+        if(Round::select('created_at')->where('round', $round)->first())
         {
             return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti tiket - kolo je odigrano!']);
         }
@@ -58,7 +55,7 @@ class GameController extends Controller
 
         Ticket::create([
             'user_id' => Auth::id(),
-            'round' => $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT),
+            'round' => $round,
             'numbers' => $numbers
         ]);
 
