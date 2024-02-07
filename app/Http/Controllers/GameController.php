@@ -30,15 +30,22 @@ class GameController extends Controller
     public function addTicket(Request $request)
     {
         $nextRound = Ticket::nextRound();
+        $round = $nextRound['date']->year . '-' . str_pad($nextRound['round'], 4, "0", STR_PAD_LEFT);
 
         if(Credit::where('user_id', Auth::id())->sum('amount') < 100)
         {
             return redirect()->route('game.view')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);
         }
 
-        if(Credit::where(['user_id' => Auth::id(), 'type' => 2, 'round' => $nextRound['round']])->count() >= 50)
+        if(Ticket::where(['user_id' => Auth::id(), 'round' => $round])->count() >= 50)
         {
             return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti vise od 50 tiketa po kolu!']);
+        }
+
+        $isPlayed = Round::select('created_at')->where('round', $round)->first();
+        if($isPlayed)
+        {
+            return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti tiket - kolo je odigrano!']);
         }
 
         $numbers = Arr::random(range(1, 10), 5);
