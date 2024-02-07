@@ -2,23 +2,24 @@
 
 @section('title', 'Statistic')
 
+@section('add_install')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+@endsection
+
 @section('add_css')
     <style>
         .ticket {
             width: 100px;
+            cursor: zoom-in;
         }
 
         .ticket span {
             display: inline-block;
             width: 30px;
             text-align: center;
-            border: 1px solid black;
             margin-bottom: 5px;
         }
 
-        .winNumbers {
-            border: 1px solid red;
-        }
     </style>
 @endsection
 
@@ -32,7 +33,18 @@
         </ul>
 
         <div class="col-md-10 d-flex justify-content-start flex-wrap" id="report">
+            @isset($winNumbers['numbers'])
+                <div class="col-12 mb-4">
+                    <h5>Dobitni brojevi: {{ json_encode($winNumbers['numbers']) }}</h5>
 
+                    <div class="ticket">
+                        @for($i=1; $i<=10; $i++)
+                            <span class="border border-2{{ in_array($i, $winNumbers['numbers']) ? ' bg-danger text-white' : '' }}">{{ $i }}</span>
+                        @endfor
+                    </div>
+                    <hr>
+                </div>
+            @endisset
             @isset($tickets)
 
                 @foreach($tickets as $ticket)
@@ -43,17 +55,12 @@
                         <div class="ticket ">
 
                             @for($i=1; $i<=10; $i++)
-                                @if(in_array($i, $ticket->numbers))
-                                    <span class="bg-primary text-white border border-2{{ in_array($i, $winNumbers['numbers']) ? ' border-danger' : '' }}">{{ $i }}</span>
-                                @else
-                                    <span class="border border-2{{ in_array($i, $winNumbers['numbers']) ? ' border-danger' : '' }}">{{ $i }}</span>
-                                @endif
+                                <span class="border border-2{{ in_array($i, $ticket->numbers) ? ' bg-primary text-white' : '' }}">{{ $i }}</span>
                             @endfor
 
                         </div>
                     </div>
                 @endforeach
-
 
             @endisset
 
@@ -62,7 +69,23 @@
 
     </div>
 
-
-
 @endsection
+
+@isset($winNumbers['numbers'])
+    @section('js')
+    <script>
+        $(document).ready(function() {
+
+            var winNumbers = {{ json_encode($winNumbers['numbers']) }};
+            $('.ticket').hover(function(){
+                ticket=$(this);
+                for(i=0; i<winNumbers.length; i++) {
+                    $(this).find('span').eq(winNumbers[i]-1).toggleClass("border-danger");
+                }
+            });
+        });
+
+    </script>
+    @endsection
+@endisset
 
