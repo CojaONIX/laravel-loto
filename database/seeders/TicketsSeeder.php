@@ -24,6 +24,7 @@ class TicketsSeeder extends Seeder
         $min = $console->ask('Minimalno tiketa po igracu?', 10);
         $max = $console->ask('Maximalno tiketa po igracu?', 20);
 
+        $combination = config('loto.combination');
         $users = User::select('id')->orderBy('id')->pluck('id');
         $ticketsSum = 0;
         foreach ($users as $user_id)
@@ -33,17 +34,17 @@ class TicketsSeeder extends Seeder
             Credit::create([
                 'user_id' => $user_id,
                 'type' => 0,
-                'amount' => $ticketsCount * 100
+                'amount' => $ticketsCount * $combination['price']
             ]);
 
             for($i=0; $i<$ticketsCount; $i++)
             {
-                $numbers = Arr::random(range(1, 10), 5);
+                $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
 
                 Credit::create([
                     'user_id' => $user_id,
                     'type' => 2,
-                    'amount' => -100,
+                    'amount' => -$combination['price'],
                 ]);
 
                 Ticket::create([

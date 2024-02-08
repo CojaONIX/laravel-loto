@@ -62,13 +62,13 @@
                         @endforeach
 
                         <tr>
-                            <th>Prenet fond za 5:</th>
+                            <th>Prenet fond za {{ max(array_keys(config('loto.funds'))) }}:</th>
                             <td></td>
                             <td class="text-end">{{ number_format($report['fundIN'], 2) }}</td>
                         </tr>
 
                         <tr>
-                            <th>Ukupno fond za 5:</th>
+                            <th>Ukupno fond za {{ max(array_keys(config('loto.funds'))) }}:</th>
                             <td></td>
                             <td class="text-end">{{ number_format($report['wins'][5]['value'] + $report['fundIN'], 2) }}</td>
                         </tr>
@@ -78,7 +78,7 @@
 
                 @isset($report['played'])
                     <div class="ticket col-md-4">
-                        @for($i=1; $i<=10; $i++)
+                        @for($i=1; $i<=config('loto.combination')['from']; $i++)
                             @if(in_array($i, $report['played']['numbers']))
                                 <span class="bg-primary text-white">{{ $i }}</span>
                             @else
@@ -107,7 +107,7 @@
 
                 @else
                     <div class="ticket col-md-4">
-                        @for($i=1; $i<=10; $i++)
+                        @for($i=1; $i<=config('loto.combination')['from']; $i++)
                             <span>{{ $i }}</span>
                         @endfor
 

@@ -26,39 +26,39 @@
 @section('content')
 
     <div class="row">
-        <ul class="nav nav-pills flex-column col-md-2" id="menu">
-            @foreach ($rounds as $r)
-                <li class="round nav-link p-1"><a class="btn btn-outline-primary {{ $round == $r ? 'active' : '' }}" href="{{ route('statistic.view', ['round' => $r]) }}">{{ $r }}</a></li>
-            @endforeach
-        </ul>
+        <div class="col-md-3 row">
+            <div class="col-6">
+                <ul class="nav nav-pills flex-column" id="menu">
+                    @foreach ($rounds as $r)
+                        <li class="round nav-link p-1"><a class="btn btn-outline-primary {{ $round == $r ? 'active' : '' }}" href="{{ route('statistic.view', ['round' => $r]) }}">{{ $r }}</a></li>
+                    @endforeach
+                </ul>
+            </div>
 
-        <div class="col-md-10 d-flex justify-content-start flex-wrap" id="report">
-            @isset($winNumbers['numbers'])
-                <div class="col-12 mb-4">
-                    <h5>Dobitni brojevi: {{ json_encode($winNumbers['numbers']) }}</h5>
-
-                    <div class="ticket">
-                        @for($i=1; $i<=10; $i++)
-                            <span class="border border-2{{ in_array($i, $winNumbers['numbers']) ? ' bg-danger text-white' : '' }}">{{ $i }}</span>
-                        @endfor
-                    </div>
-                    <hr>
+            @isset($winNumbers)
+            <div class="col-6">
+                <div class="ticket">
+                    @for($i=1; $i<=config('loto.combination')['from']; $i++)
+                        <span class="border border-2{{ in_array($i, $winNumbers['numbers']) ? ' bg-danger text-white' : '' }}">{{ $i }}</span>
+                    @endfor
                 </div>
+            </div>
             @endisset
-            @isset($tickets)
+        </div>
 
+        <div class="col-md-9 d-flex justify-content-start flex-wrap" id="report">
+
+            @isset($tickets)
                 @foreach($tickets as $ticket)
                     <div class="mb-4 me-4">
-                        @if($winNumbers['numbers'])
-                        <h5 class="text-center">{{ $ticket->win }} - {{ number_format($ticket->paid, 2) }}</h5>
-                        @endif
                         <div class="ticket ">
-
-                            @for($i=1; $i<=10; $i++)
+                            @for($i=1; $i<=config('loto.combination')['from']; $i++)
                                 <span class="border border-2{{ in_array($i, $ticket->numbers) ? ' bg-primary text-white' : '' }}">{{ $i }}</span>
                             @endfor
-
                         </div>
+                        @if($winNumbers['numbers'])
+                            <h5 class="text-center">{{ $ticket->win }} - {{ number_format($ticket->paid, 2) }}</h5>
+                        @endif
                     </div>
                 @endforeach
 
@@ -78,7 +78,6 @@
 
             var winNumbers = {{ json_encode($winNumbers['numbers']) }};
             $('.ticket').hover(function(){
-                ticket=$(this);
                 for(i=0; i<winNumbers.length; i++) {
                     $(this).find('span').eq(winNumbers[i]-1).toggleClass("border-danger");
                 }

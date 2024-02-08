@@ -42,7 +42,7 @@
     <div class="row">
     @foreach($tickets as $ticket)
         <div class="ticket mb-4">
-            @for($i=1; $i<=10; $i++)
+            @for($i=1; $i<=config('loto.combination')['from']; $i++)
                 @if(in_array($i, $ticket->numbers))
                     <span class="bg-primary text-white">{{ $i }}</span>
                 @else

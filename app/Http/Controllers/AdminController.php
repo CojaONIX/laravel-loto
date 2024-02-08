@@ -19,11 +19,12 @@ class AdminController extends Controller
             return view('admin', compact('rounds', 'round'));
         }
 
+        $combination = config('loto.combination');
         $ticketsCount = Ticket::where(['round' => $round])->count();
-        $ticketsValue = $ticketsCount * 100;
+        $ticketsValue = $ticketsCount * $combination['price'];
 
-        $report['ticketsCount'] = Ticket::where(['round' => $round])->count();
-        $report['ticketsValue'] = $report['ticketsCount'] * 100;
+        $report['ticketsCount'] = $ticketsCount;
+        $report['ticketsValue'] = $ticketsValue;
 
         $b = config('loto.bank');
         $report['bank']['percentage'] = $b;
@@ -55,11 +56,15 @@ class AdminController extends Controller
 
     public function rollNumbers(Request $request)
     {
+        $combination = config('loto.combination');
+
         $lastRound = Round::latest('id')->first();
         $fundIN = $lastRound ? $lastRound->fundOUT : 0; // vrednost prenetog fonda iz prethodnog kola
 
         $tickets = Ticket::where(['round' => $request->get('round')])->get();
-        $numbers = Arr::random(range(1, 10), 5);
+        $ticketsValue = count($tickets) * $combination['price'];
+
+        $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
         foreach($tickets as $ticket)
         {
             $ticket->win = count(array_intersect($numbers, $ticket->numbers));
@@ -70,7 +75,7 @@ class AdminController extends Controller
         $fundOUT = 0;
         foreach($paids as $k => $v)
         {
-            $paids[$k] = (count($tickets) * 100) / 100 * $v; // fond dobitka
+            $paids[$k] = $ticketsValue / 100 * $v; // fond dobitka
 
             if($k == max(array_keys($paids)))
             {
@@ -105,12 +110,11 @@ class AdminController extends Controller
             }
         }
 
-
         Round::create([
             'round' => $request->get('round'),
             'numbers' => $numbers,
             'report' => $report,
-            'bank' => (count($tickets) * 100) / 100 * config('loto.bank'),
+            'bank' => $ticketsValue / 100 * config('loto.bank'),
             'fundIN' => $fundIN,
             'fundOUT' => $fundOUT
         ]);
