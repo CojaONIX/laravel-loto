@@ -17,6 +17,7 @@ class TicketsSeeder extends Seeder
      */
     public function run(): void
     {
+        $time = Carbon::now();
         $nextRound = Ticket::nextRound();
 
         $console = $this->command->getOutput();
@@ -31,32 +32,64 @@ class TicketsSeeder extends Seeder
         {
             $ticketsCount = rand($min, $max);
             $ticketsSum += $ticketsCount;
-            Credit::create([
-                'user_id' => $user_id,
-                'type' => 0,
-                'amount' => $ticketsCount * $combination['price']
-            ]);
+//            Credit::create([
+//                'user_id' => $user_id,
+//                'type' => 0,
+//                'amount' => $ticketsCount * $combination['price']
+//            ]);
 
+            // 5 * 1000 tiketa -> 104 sec
+            // 5 * 100 tiketa -> 12 sec
+//            for($i=0; $i<$ticketsCount; $i++)
+//            {
+//                $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
+//
+//                Credit::create([
+//                    'user_id' => $user_id,
+//                    'type' => 2,
+//                    'amount' => -$combination['price'],
+//                ]);
+//
+//                Ticket::create([
+//                    'user_id' => $user_id,
+//                    'round' => '2024-' . str_pad($round, 4, "0", STR_PAD_LEFT),
+//                    'numbers' => $numbers
+//                ]);
+//
+//            }
+
+            $credits = array();
+            $tickets = array();
             for($i=0; $i<$ticketsCount; $i++)
             {
                 $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
 
-                Credit::create([
+                $credits[] = [
                     'user_id' => $user_id,
                     'type' => 2,
                     'amount' => -$combination['price'],
-                ]);
+                    'created_at' => $time,
+                    'updated_at' => $time
+                ];
 
-                Ticket::create([
+                $tickets[] = [
                     'user_id' => $user_id,
                     'round' => '2024-' . str_pad($round, 4, "0", STR_PAD_LEFT),
-                    'numbers' => $numbers
-                ]);
+                    'numbers' => json_encode($numbers),
+                    'created_at' => $time,
+                    'updated_at' => $time
+                ];
 
             }
+
+            Credit::insert($credits);
+            Ticket::insert($tickets);
         }
 
         $console->info("Kreitano je $ticketsSum tiketa");
+
+        $timeDiff = $time->diffInSeconds(Carbon::now());
+        $console->info("Za: $timeDiff sekundi");
 
     }
 }
