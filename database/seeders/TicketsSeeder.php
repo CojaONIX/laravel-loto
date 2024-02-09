@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use App\Models\Credit;
 use App\Models\Ticket;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
+use Lotto;
 
 class TicketsSeeder extends Seeder
 {
@@ -18,7 +19,7 @@ class TicketsSeeder extends Seeder
     public function run(): void
     {
         $time = Carbon::now();
-        $nextRound = Ticket::nextRound();
+        $nextRound = Lotto::nextRound();
 
         $console = $this->command->getOutput();
         $round = $console->ask('Za koje kolo zelite tikete?', $nextRound['round']);
@@ -32,11 +33,11 @@ class TicketsSeeder extends Seeder
         {
             $ticketsCount = rand($min, $max);
             $ticketsSum += $ticketsCount;
-//            Credit::create([
-//                'user_id' => $user_id,
-//                'type' => 0,
-//                'amount' => $ticketsCount * $combination['price']
-//            ]);
+            Credit::create([
+                'user_id' => $user_id,
+                'type' => 0,
+                'amount' => $ticketsCount * $combination['price']
+            ]);
 
             // 5 * 1000 tiketa -> 104 sec
             // 5 * 100 tiketa -> 12 sec
@@ -87,9 +88,6 @@ class TicketsSeeder extends Seeder
         }
 
         $console->info("Kreitano je $ticketsSum tiketa");
-
-        $timeDiff = $time->diffInSeconds(Carbon::now());
-        $console->info("Za: $timeDiff sekundi");
 
     }
 }

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('round', 9);
             $table->json('numbers');
             $table->unsignedTinyInteger('win')->nullable();
-            $table->unsignedFloat('paid', 8, 2)->nullable();
+            $table->unsignedFloat('paid')->nullable();
             $table->timestamps();
         });
     }

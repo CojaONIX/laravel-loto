@@ -19,6 +19,7 @@
 @endsection
 
 @section('content')
+    {{ json_encode(Lotto::nextRound()) }}
 
     <h3>Kredit: {{ $creditsSum }}</h3>
     <h3>Kolo: {{ $nextRound['round'] }} - {{ count($tickets) }} tiketa</h3>
