@@ -10,7 +10,7 @@ return [
         'find' => 7,
         'from' => 39,
         'price' => 100,
-        'maxCount' => 5
+        'maxCount' => 50
     ],
     'bank' => 10,
 //    'funds' => [

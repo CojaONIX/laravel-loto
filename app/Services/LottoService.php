@@ -6,6 +6,7 @@ use App\Models\Credit;
 use App\Models\Round;
 use App\Models\Ticket;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class LottoService
@@ -45,5 +46,10 @@ class LottoService
         }
 
         return $errors;
+    }
+
+    public static function getRandomCombination($combination)
+    {
+        return Arr::random(range(1, $combination['from']), $combination['find']);
     }
 }

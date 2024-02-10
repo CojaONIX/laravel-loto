@@ -6,7 +6,7 @@ use App\Models\Credit;
 use App\Models\Round;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+use Lotto;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -64,7 +64,7 @@ class AdminController extends Controller
         $tickets = Ticket::where(['round' => $request->get('round')])->get();
         $ticketsValue = count($tickets) * $combination['price'];
 
-        $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
+        $numbers = Lotto::getRandomCombination($combination);
         foreach($tickets as $ticket)
         {
             $ticket->win = count(array_intersect($numbers, $ticket->numbers));

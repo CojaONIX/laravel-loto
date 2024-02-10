@@ -8,7 +8,6 @@ use App\Models\Ticket;
 use App\Models\User;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Lotto;
 
@@ -36,7 +35,7 @@ class GameController extends Controller
             return redirect()->route('game.view')->withErrors($userCantPlayRound);
         }
 
-        $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
+        $numbers = Lotto::getRandomCombination($combination);
 
         Credit::create([
             'user_id' => Auth::id(),
