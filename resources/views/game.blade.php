@@ -19,7 +19,6 @@
 @endsection
 
 @section('content')
-    {{ json_encode(Lotto::nextRound()) }}
 
     <h3>Kredit: {{ $creditsSum }}</h3>
     <h3>Kolo: {{ $nextRound['round'] }} - {{ count($tickets) }} tiketa</h3>
@@ -34,8 +33,14 @@
         </form>
     @endif
 
-    @if(session('errors'))
-        {{session('errors')->first()}}
+    @if ($errors->any())
+        <div class="alert alert-danger mt-3">
+            <ul class="m-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     <hr>

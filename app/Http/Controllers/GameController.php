@@ -18,8 +18,8 @@ class GameController extends Controller
     {
         $creditsSum = Credit::where('user_id', Auth::id())->sum('amount');
         $nextRound = Lotto::nextRound();
-        $isPlayed = Round::select('created_at')->where('round', $nextRound['year-round'])->first();
         $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $nextRound['year-round']])->get();
+        $isPlayed = Round::select('created_at')->where('round', $nextRound['year-round'])->first();
 
         return view('game', compact('creditsSum', 'nextRound', 'tickets', 'isPlayed'));
     }
@@ -30,19 +30,10 @@ class GameController extends Controller
         $round = Lotto::nextRound()['year-round'];
         $combination = config('loto.combination');
 
-        if(Credit::where('user_id', Auth::id())->sum('amount') < $combination['price'])
+        $userCantPlayRound = Lotto::userCantPlayRound($round, $combination);
+        if($userCantPlayRound)
         {
-            return redirect()->route('game.view')->withErrors(['message'=>'Nemate dovoljno kredita za uplatu tiketa!']);
-        }
-
-        if(Ticket::where(['user_id' => Auth::id(), 'round' => $round])->count() >= $combination['maxCount'])
-        {
-            return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti vise od '.$combination['maxCount'].' tiketa po kolu!']);
-        }
-
-        if(Round::select('created_at')->where('round', $round)->first())
-        {
-            return redirect()->route('game.view')->withErrors(['message'=>'Ne mozete uplatiti tiket - kolo je odigrano!']);
+            return redirect()->route('game.view')->withErrors($userCantPlayRound);
         }
 
         $numbers = Arr::random(range(1, $combination['from']), $combination['find']);

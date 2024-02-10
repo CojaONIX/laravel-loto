@@ -2,15 +2,15 @@
 
 return [
     'round' => [
-        'day' => 'Wednesday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-        'hour' => 13,
-        'minute' => 41
+        'day' => 'Saturday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+        'hour' => 11,
+        'minute' => 7
     ],
     'combination' => [
         'find' => 7,
         'from' => 39,
         'price' => 100,
-        'maxCount' => 50
+        'maxCount' => 5
     ],
     'bank' => 10,
 //    'funds' => [
