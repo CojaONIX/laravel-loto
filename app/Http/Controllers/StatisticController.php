@@ -9,18 +9,19 @@ use Illuminate\Support\Facades\Auth;
 
 class StatisticController extends Controller
 {
-    public function index($round)
+    public function index()
     {
-        // Menu Buttons
-        $rounds = Ticket::select('round')->distinct()->get()->pluck('round');
-        if($round == 'page') {
-            return view('statistic', compact('rounds', 'round'));
-        }
+        $rounds = Ticket::select('round')->distinct()->get()->pluck('round'); // buttons
+        return view('statistic', compact('rounds'));
+    }
 
+    public function roundStatistic($round)
+    {
+        $rounds = Ticket::select('round')->distinct()->get()->pluck('round'); // buttons
         $tickets = Ticket::where(['user_id' => Auth::id(), 'round' => $round])->get();
         $winNumbers = Round::select('numbers')->where(['round' => $round])->first();
-        $winNumbers = $winNumbers ? $winNumbers->toArray() : ['numbers' => []];
+        $winNumbers = $winNumbers ? $winNumbers['numbers'] : [];
 
-        return view('statistic', compact('tickets', 'winNumbers', 'rounds', 'round'));
+        return view('statisticRound', compact('tickets', 'winNumbers', 'rounds', 'round'));
     }
 }

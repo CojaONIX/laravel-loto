@@ -35,7 +35,6 @@ class GameController extends Controller
             return redirect()->route('game.view')->withErrors($userCantPlayRound);
         }
 
-        $numbers = Lotto::getRandomCombination($combination);
 
         Credit::create([
             'user_id' => Auth::id(),
@@ -46,7 +45,7 @@ class GameController extends Controller
         Ticket::create([
             'user_id' => Auth::id(),
             'round' => $round,
-            'numbers' => $numbers
+            'numbers' => Lotto::getRandomCombination($combination)
         ]);
 
         return redirect()->route('game.view');

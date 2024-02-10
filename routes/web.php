@@ -42,7 +42,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(StatisticController::class)->group(function () {
-        Route::get('/statistic/{round}', 'index')->name('statistic.view');
+        Route::get('/statistic', 'index')->name('statistic.view');
+        Route::get('/statistic/{round}', 'roundStatistic')->name('statistic.round.view');
     });
 
     Route::controller(TestController::class)->group(function () {
