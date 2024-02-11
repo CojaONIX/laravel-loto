@@ -11,115 +11,66 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function index($round)
+    public function index()
     {
-        // Menu Buttons
         $rounds = Ticket::select('round')->distinct()->get()->pluck('round');
-        if($round == 'page') {
-            return view('admin', compact('rounds', 'round'));
-        }
+        return view('admin', compact('rounds'));
+    }
 
-        $combination = config('loto.combination');
-        $ticketsCount = Ticket::where(['round' => $round])->count();
-        $ticketsValue = $ticketsCount * $combination['price'];
-
-        $report['ticketsCount'] = $ticketsCount;
-        $report['ticketsValue'] = $ticketsValue;
-
-        $b = config('loto.bank');
-        $report['bank']['percentage'] = $b;
-        $report['bank']['value'] = $ticketsValue / 100 * $b;
-
-        $funds = config('loto.funds');
-        foreach ($funds as $k => $v)
-        {
-            $report['wins'][$k]['percentage'] = $v;
-            $report['wins'][$k]['value'] = $ticketsValue / 100 * $v;
-        }
-
-        $report['played'] = Round::where(['round' => $round])->first();
-
-        if($report['played'])
-        {
-            $report['fundIN'] = $report['played']['fundIN'];
-            $report['fundOUT'] = $report['played']['fundOUT'];
-        }
-        else
-        {
-            $lastRound = Round::latest('id')->first();
-            $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
-            $report['fundOUT'] = null;
-        }
-
-        return view('admin', compact('report', 'rounds', 'round'));
+    public function roundReport($round)
+    {
+        $report = Lotto::getRoundReport($round);
+        $rounds = Ticket::select('round')->distinct()->get()->pluck('round'); //buttons
+        return view('adminRound', compact('report', 'rounds', 'round'));
     }
 
     public function rollNumbers(Request $request)
     {
-        $combination = config('loto.combination');
+        $round = $request->get('round');
 
-        $lastRound = Round::latest('id')->first();
-        $fundIN = $lastRound ? $lastRound->fundOUT : 0; // vrednost prenetog fonda iz prethodnog kola
-
-        $tickets = Ticket::where(['round' => $request->get('round')])->get();
-        $ticketsValue = count($tickets) * $combination['price'];
-
-        $numbers = Lotto::getRandomCombination($combination);
-        foreach($tickets as $ticket)
+        $configLotto = config('loto');
+        foreach(array_keys($configLotto['wins']['percentages']) as $win)
         {
-            $ticket->win = count(array_intersect($numbers, $ticket->numbers));
+            $counts[$win] = 0;
         }
 
-        $wins = array_count_values($tickets->pluck('win')->toArray());
-        $paids = config('loto.funds');
-        $fundOUT = 0;
-        foreach($paids as $k => $v)
+        $numbers = Lotto::getRandomCombination($configLotto['combination']);
+
+        $tickets = Ticket::where(['round' => $round])->get();
+        foreach($tickets as $ticket)
         {
-            $paids[$k] = $ticketsValue / 100 * $v; // fond dobitka
-
-            if($k == max(array_keys($paids)))
+            $win = count(array_intersect($numbers, $ticket->numbers));
+            if(isset($counts[$win]))
             {
-                $paids[$k] += $fundIN; // transfer prenetog fonda maksimalnom dobitku
-            }
-
-            if(isset($wins[$k]))
-            {
-                $paids[$k] = round($paids[$k] / $wins[$k], 2); // vrednost dobitka ako postoji
-                $report[$k]['wins'] = $wins[$k];
-                $report[$k]['value'] = $paids[$k];
-            }
-            else
-            {
-                $fundOUT += $paids[$k]; // prenosni fond u sledece kolo ako dobitak ne postoji
-                $report[$k]['wins'] = 0;
-                $report[$k]['value'] = 0;
+                $ticket->win = $win;
+                $counts[$win]++;
             }
         }
 
+        $report = Lotto::getRoundReport($round, $counts);
+
         foreach($tickets as $ticket)
         {
-            $ticket->paid = isset($paids[$ticket->win]) ? $paids[$ticket->win] : 0;
-            $ticket->save();
-
-            if($ticket->paid > 0) { // Isplata dobitnicima
+            if($ticket->win) // Isplata dobitnicima
+            {
                 Credit::create([
                     'user_id' => $ticket->user_id,
                     'type' => 3,
-                    'amount' => $ticket->paid
+                    'amount' => $ticket->win * 222
                 ]);
             }
         }
 
         Round::create([
-            'round' => $request->get('round'),
+            'round' => $round,
             'numbers' => $numbers,
             'report' => $report,
-            'bank' => $ticketsValue / 100 * config('loto.bank'),
-            'fundIN' => $fundIN,
-            'fundOUT' => $fundOUT
+            'bank' => $report['bank']['fund'],
+            'fundIN' => $report['fundIN'],
+            'fundOUT' => $report['fundOUT']
         ]);
 
-        return redirect()->route('admin.view', ['round' => $request->get('round')]);
+        return redirect()->route('admin.view', ['round' => $round]);
     }
 
 }

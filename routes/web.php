@@ -37,7 +37,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(AdminController::class)->group(function () {
-        Route::get('/admin/report/{round}', 'index')->name('admin.view');
+        Route::get('/admin/report', 'index')->name('admin.view');
+        Route::get('/admin/report/{round}', 'roundReport')->name('admin.round.view');
         Route::post('/admin/roll', 'rollNumbers')->name('admin.roll');
     });
 

@@ -52,4 +52,65 @@ class LottoService
     {
         return Arr::random(range(1, $combination['from']), $combination['find']);
     }
+
+    public static function getRoundReport($round, $counts=null)
+    {
+        $report = Round::where(['round' => $round])->first();
+
+        if($report)
+        {
+            return $report->report;
+        }
+
+        $lastRound = Round::latest('id')->first();
+        $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
+        $report['fundOUT'] = 0;
+
+        $configLotto = config('loto');
+
+        $ticketsCount = Ticket::where(['round' => $round])->count();
+        $ticketsValue = $ticketsCount * $configLotto['combination']['price'];
+
+        $report['ticketsCount'] = $ticketsCount;
+        $report['ticketsValue'] = $ticketsValue;
+
+        $bankPercentage = $configLotto['bank'];
+        $report['bank']['percentage'] = $bankPercentage;
+        $report['bank']['fund'] = $ticketsValue / 100 * $bankPercentage;
+
+        $report['wins'] = $configLotto['wins'];
+        foreach ($report['wins']['percentages'] as $win => $winPercentage)
+        {
+            $report['wins']['funds'][$win] = $ticketsValue / 100 * $winPercentage;
+
+            if($win == max(array_keys($report['wins']['percentages'])))
+            {
+                $report['wins']['funds'][$win] += $report['fundIN'];
+            }
+        }
+
+        if($counts)
+        {
+            $report['wins']['counts'] = $counts;
+
+            foreach($counts as $win => $count)
+            {
+                if($count > 0)
+                {
+                    $paids[$win] = round($report['wins']['funds'][$win] / $count, 2);
+                }
+                else
+                {
+                    $paids[$win] = 0;
+                    $report['fundOUT'] += $report['wins']['funds'][$win];
+                }
+            }
+
+            $report['wins']['paids'] = $paids;
+
+        }
+
+
+        return $report;
+    }
 }
