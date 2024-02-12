@@ -53,15 +53,15 @@
                 @endforeach
 
                 <tr>
-                    <th>Prenet fond za {{ max(array_keys(config('loto.wins.percentages'))) }}:</th>
+                    <th>Prenet fond za {{ config('loto.combination.find') }}:</th>
                     <td></td>
                     <td class="text-end">{{ number_format($report['fundIN'], 2) }}</td>
                 </tr>
 
                 <tr>
-                    <th>Ukupno fond za {{ max(array_keys(config('loto.wins.percentages'))) }}:</th>
+                    <th>Ukupno fond za {{ config('loto.combination.find') }}:</th>
                     <td></td>
-                    <td class="text-end">{{ number_format($report['wins']['funds'][max(array_keys(config('loto.wins.percentages')))] + $report['fundIN'], 2) }}</td>
+                    <td class="text-end">{{ number_format($report['wins']['funds'][config('loto.combination.find')] + $report['fundIN'], 2) }}</td>
                 </tr>
 
             </table>
@@ -69,7 +69,7 @@
 
         @isset($report['wins']['paids'])
             <div class="ticket col-md-4">
-                @for($i=1; $i<=config('loto.combination')['from']; $i++)
+                @for($i=1; $i<=config('loto.combination.from'); $i++)
                     @if(in_array($i, $numbers))
                         <span class="bg-primary text-white">{{ $i }}</span>
                     @else
@@ -80,11 +80,11 @@
 
             <div class="col-md-4">
                 <table class="table">
-                    @foreach($report['wins']['counts'] as $k => $v)
+                    @foreach($report['wins']['counts'] as $win => $count)
                     <tr>
-                        <th>{{ $k }}</th>
-                        <td>{{ $v }}</td>
-                        <td class="text-end">{{ number_format($report['wins']['paids'][$k], 2) }}</td>
+                        <th>{{ $win }}</th>
+                        <td>{{ $count }}</td>
+                        <td class="text-end">{{ number_format($report['wins']['paids'][$win], 2) }}</td>
                     </tr>
                     @endforeach
 
@@ -98,7 +98,7 @@
 
         @else
             <div class="ticket col-md-4">
-                @for($i=1; $i<=config('loto.combination')['from']; $i++)
+                @for($i=1; $i<=config('loto.combination.from'); $i++)
                     <span>{{ $i }}</span>
                 @endfor
 

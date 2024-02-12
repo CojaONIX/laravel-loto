@@ -26,7 +26,7 @@
 @section('winNumbers')
     <div class="col-6">
         <div class="ticket">
-            @for($i=1; $i<=config('loto.combination')['from']; $i++)
+            @for($i=1; $i<=config('loto.combination.from'); $i++)
                 <span class="border border-2{{ in_array($i, $winNumbers) ? ' bg-danger text-white' : '' }}">{{ $i }}</span>
             @endfor
         </div>
@@ -38,7 +38,7 @@
         @foreach($tickets as $ticket)
             <div class="mb-4 me-4">
                 <div class="ticket ">
-                    @for($i=1; $i<=config('loto.combination')['from']; $i++)
+                    @for($i=1; $i<=config('loto.combination.from'); $i++)
                         <span class="border border-2{{ in_array($i, $ticket->numbers) ? ' bg-primary text-white' : '' }}">{{ $i }}</span>
                     @endfor
                 </div>

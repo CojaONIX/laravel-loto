@@ -55,28 +55,23 @@ class LottoService
 
     public static function getRoundReport($round, $counts=null)
     {
-
-        $lastRound = Round::latest('id')->first();
-        $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
-        $report['fundOUT'] = 0;
-
         $configLotto = config('loto');
 
-        $ticketsCount = Ticket::where(['round' => $round])->count();
-        $ticketsValue = $ticketsCount * $configLotto['combination']['price'];
+        $report['ticketsCount'] = Ticket::where(['round' => $round])->count();
+        $report['ticketsValue'] = $report['ticketsCount'] * $configLotto['combination']['price'];
 
-        $report['ticketsCount'] = $ticketsCount;
-        $report['ticketsValue'] = $ticketsValue;
-
-        $bankPercentage = $configLotto['bank'];
-        $report['bank']['percentage'] = $bankPercentage;
-        $report['bank']['fund'] = $ticketsValue / 100 * $bankPercentage;
+        $report['bank']['percentage'] = $configLotto['bank'];
+        $report['bank']['fund'] = $report['ticketsValue'] / 100 * $report['bank']['percentage'];
 
         $report['wins'] = $configLotto['wins'];
         foreach ($report['wins']['percentages'] as $win => $winPercentage)
         {
-            $report['wins']['funds'][$win] = $ticketsValue / 100 * $winPercentage;
+            $report['wins']['funds'][$win] = $report['ticketsValue'] / 100 * $winPercentage;
         }
+
+        $lastRound = Round::latest('id')->first();
+        $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
+        $report['fundOUT'] = 0;
 
         if($counts)
         {
@@ -86,19 +81,15 @@ class LottoService
             {
                 if($count > 0)
                 {
-                    $paids[$win] = round($report['wins']['funds'][$win] / $count, 2);
+                    $report['wins']['paids'][$win] = round($report['wins']['funds'][$win] / $count, 2);
                 }
                 else
                 {
-                    $paids[$win] = 0;
+                    $report['wins']['paids'][$win] = 0;
                     $report['fundOUT'] += $report['wins']['funds'][$win];
                 }
             }
-
-            $report['wins']['paids'] = $paids;
-
         }
-
 
         return $report;
     }
