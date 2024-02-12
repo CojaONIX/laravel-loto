@@ -55,12 +55,6 @@ class LottoService
 
     public static function getRoundReport($round, $counts=null)
     {
-        $report = Round::where(['round' => $round])->first();
-
-        if($report)
-        {
-            return $report->report;
-        }
 
         $lastRound = Round::latest('id')->first();
         $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
@@ -82,11 +76,6 @@ class LottoService
         foreach ($report['wins']['percentages'] as $win => $winPercentage)
         {
             $report['wins']['funds'][$win] = $ticketsValue / 100 * $winPercentage;
-
-            if($win == max(array_keys($report['wins']['percentages'])))
-            {
-                $report['wins']['funds'][$win] += $report['fundIN'];
-            }
         }
 
         if($counts)

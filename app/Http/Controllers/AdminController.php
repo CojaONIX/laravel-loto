@@ -19,9 +19,14 @@ class AdminController extends Controller
 
     public function roundReport($round)
     {
-        $report = Lotto::getRoundReport($round);
+        $roundActive = $round;
+        $round = Round::where(['round' => $round])->first();
+
+        $numbers = $round ? $round->numbers : [];
+        $report = $round ? $round->report : Lotto::getRoundReport($roundActive);
         $rounds = Ticket::select('round')->distinct()->get()->pluck('round'); //buttons
-        return view('adminRound', compact('report', 'rounds', 'round'));
+
+        return view('adminRound', compact('report', 'rounds', 'roundActive', 'numbers'));
     }
 
     public function rollNumbers(Request $request)
@@ -53,10 +58,12 @@ class AdminController extends Controller
         {
             if($ticket->win) // Isplata dobitnicima
             {
+                $ticket->paid = $report['wins']['paids'][$ticket->win];
+                $ticket->save();
                 Credit::create([
                     'user_id' => $ticket->user_id,
                     'type' => 3,
-                    'amount' => $ticket->win * 222
+                    'amount' => $ticket->paid
                 ]);
             }
         }

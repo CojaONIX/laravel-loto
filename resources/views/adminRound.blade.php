@@ -26,7 +26,7 @@
                 <tr>
                     <th>Kolo:</th>
                     <td></td>
-                    <td class="text-end">{{ $round }}</td>
+                    <td class="text-end">{{ $roundActive }}</td>
                 </tr>
                 <tr>
                     <th>Uplaceno tiketa:</th>
@@ -67,10 +67,10 @@
             </table>
         </div>
 
-        @isset($report['played'])
+        @isset($report['wins']['paids'])
             <div class="ticket col-md-4">
                 @for($i=1; $i<=config('loto.combination')['from']; $i++)
-                    @if(in_array($i, $report['played']['numbers']))
+                    @if(in_array($i, $numbers))
                         <span class="bg-primary text-white">{{ $i }}</span>
                     @else
                         <span>{{ $i }}</span>
@@ -80,11 +80,11 @@
 
             <div class="col-md-4">
                 <table class="table">
-                    @foreach($report['played']['report'] as $k => $v)
+                    @foreach($report['wins']['counts'] as $k => $v)
                     <tr>
                         <th>{{ $k }}</th>
-                        <td>{{ $v['wins'] }}</td>
-                        <td class="text-end">{{ number_format($v['value'], 2) }}</td>
+                        <td>{{ $v }}</td>
+                        <td class="text-end">{{ number_format($report['wins']['paids'][$k], 2) }}</td>
                     </tr>
                     @endforeach
 
@@ -104,7 +104,7 @@
 
                 <form method="POST" action="{{ route('admin.roll') }}">
                     @csrf
-                    <input type="hidden" name="round" value="{{ $round }}">
+                    <input type="hidden" name="round" value="{{ $roundActive }}">
                     <button type="submit" class="btn btn-outline-primary col-9">ROLL</button>
                 </form>
             </div>
