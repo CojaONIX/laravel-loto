@@ -58,12 +58,10 @@ class AdminController extends Controller
         {
             if($ticket->win) // Isplata dobitnicima
             {
-                $ticket->paid = $report['wins']['paids'][$ticket->win];
-                $ticket->save();
                 Credit::create([
                     'user_id' => $ticket->user_id,
                     'type' => 3,
-                    'amount' => $ticket->paid
+                    'amount' => $report['wins']['paids'][$ticket->win]
                 ]);
             }
         }
@@ -77,7 +75,7 @@ class AdminController extends Controller
             'fundOUT' => $report['fundOUT']
         ]);
 
-        return redirect()->route('admin.view', ['round' => $round]);
+        return redirect()->route('admin.round.view', ['round' => $round]);
     }
 
 }

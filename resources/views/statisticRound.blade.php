@@ -43,7 +43,7 @@
                     @endfor
                 </div>
                 @if($winNumbers)
-                    <h5 class="text-center">{{ $ticket->win }} - {{ number_format($ticket->paid, 2) }}</h5>
+                    <h6 class="text-center">{{ $ticket->win }} - {{ number_format($ticket->paid, 2) }}</h6>
                 @endif
             </div>
         @endforeach

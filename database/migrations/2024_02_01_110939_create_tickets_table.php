@@ -19,8 +19,6 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('round', 9);
             $table->json('numbers');
-            $table->unsignedTinyInteger('win')->nullable();
-            $table->unsignedFloat('paid')->nullable();
             $table->timestamps();
         });
     }
