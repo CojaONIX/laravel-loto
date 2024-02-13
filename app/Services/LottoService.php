@@ -75,18 +75,18 @@ class LottoService
 
         if($counts)
         {
-            $report['wins']['counts'] = $counts;
-
-            foreach($counts as $win => $count)
+            foreach($report['wins']['funds'] as $win => $fund)
             {
-                if($count > 0)
+                if(isset($counts[$win]))
                 {
-                    $report['wins']['paids'][$win] = round($report['wins']['funds'][$win] / $count, 2);
+                    $report['wins']['counts'][$win] = $counts[$win];
+                    $report['wins']['paids'][$win] = round($fund / $counts[$win], 2);
                 }
                 else
                 {
+                    $report['wins']['counts'][$win] = 0;
                     $report['wins']['paids'][$win] = 0;
-                    $report['fundOUT'] += $report['wins']['funds'][$win];
+                    $report['fundOUT'] += $fund;
                 }
             }
         }
