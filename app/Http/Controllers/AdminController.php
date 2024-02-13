@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Lotto;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 
 class AdminController extends Controller
 {
@@ -35,14 +36,13 @@ class AdminController extends Controller
         $configLotto = config('loto');
         $numbers = Lotto::getRandomCombination($configLotto['combination']);
 
-        $tickets = Ticket::where(['round' => $round])->get();
         $winTickets = array();
         $minWin = min(array_keys($configLotto['wins']['percentages']));
-        foreach($tickets as $ticket)
-        {
+
+        $tickets = Ticket::where(['round' => $round])->select(['user_id', 'numbers'])->lazy();
+        foreach ($tickets as $ticket) {
             $win = count(array_intersect($numbers, $ticket->numbers));
-            if($win >= $minWin)
-            {
+            if ($win >= $minWin) {
                 $winTickets[] = [
                     'user_id' => $ticket->user_id,
                     'type' => 3,
@@ -50,6 +50,21 @@ class AdminController extends Controller
                 ];
             }
         }
+
+
+//        Ticket::where(['round' => $round])->select(['user_id', 'numbers'])->chunk(60000, function (Collection $ticketsChunk) use(&$winTickets, $minWin, $numbers) {
+//            foreach ($ticketsChunk as $ticket) {
+//                $win = count(array_intersect($numbers, $ticket->numbers));
+//                if($win >= $minWin)
+//                {
+//                    $winTickets[] = [
+//                        'user_id' => $ticket->user_id,
+//                        'type' => 3,
+//                        'amount' => $win
+//                    ];
+//                }
+//            }
+//        });
 
         $counts = array_count_values(array_column($winTickets, 'amount'));
         $report = Lotto::getRoundReport($round, $counts);
@@ -64,14 +79,16 @@ class AdminController extends Controller
         ])->created_at;
 
         $paids = $report['wins']['paids'];
-        foreach($winTickets as &$winTicket)
+        foreach(array_chunk($winTickets,1000) as $chunk)
         {
-            $winTicket['amount'] = $paids[$winTicket['amount']];
-            $winTicket['created_at'] = $time;
-            $winTicket['updated_at'] = $time;
-        }
+            foreach($chunk as &$winTicket) {
+                $winTicket['amount'] = $paids[$winTicket['amount']];
+                $winTicket['created_at'] = $time;
+                $winTicket['updated_at'] = $time;
+            }
 
-        Credit::insert($winTickets);
+            Credit::insert($chunk);
+        }
 
         return redirect()->route('admin.round.view', ['round' => $round]);
     }
