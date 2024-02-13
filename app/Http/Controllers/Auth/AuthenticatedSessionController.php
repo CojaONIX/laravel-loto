@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        $users = User::all();
+        $users = User::take(10)->get();
         return view('auth.login', compact('users'));
     }
 
