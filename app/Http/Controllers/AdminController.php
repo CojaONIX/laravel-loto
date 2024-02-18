@@ -21,13 +21,13 @@ class AdminController extends Controller
     public function roundReport($round)
     {
         $roundActive = $round;
-        $round = Round::where(['round' => $round])->first();
-
-        $numbers = $round ? $round->numbers : [];
-        $report = $round ? $round->report : Lotto::getRoundReport($roundActive);
         $rounds = Ticket::select('round')->distinct()->get()->pluck('round'); //buttons
 
-        return view('adminRound', compact('report', 'rounds', 'roundActive', 'numbers'));
+        $round = Round::where(['round' => $round])->first();
+        $report = $round ? $round->report : Lotto::getRoundReport($roundActive);
+        $numbers = $round ? $round->numbers : [];
+
+        return view('adminRound', compact('report', 'numbers', 'rounds', 'roundActive'));
     }
 
     public function rollNumbers(Request $request)
@@ -51,8 +51,7 @@ class AdminController extends Controller
             }
         }
 
-
-//        Ticket::where(['round' => $round])->select(['user_id', 'numbers'])->chunk(60000, function (Collection $ticketsChunk) use(&$winTickets, $minWin, $numbers) {
+//        Ticket::where(['round' => $round])->select(['user_id', 'numbers'])->chunk(5000, function (Collection $ticketsChunk) use(&$winTickets, $minWin, $numbers) {
 //            foreach ($ticketsChunk as $ticket) {
 //                $win = count(array_intersect($numbers, $ticket->numbers));
 //                if($win >= $minWin)

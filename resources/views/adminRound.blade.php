@@ -18,6 +18,10 @@
     </style>
 @endsection
 
+@php
+    $configCombination = config('loto.combination');
+@endphp
+
 @section('report')
 
     <div class="col-md-10 row" id="report">
@@ -53,15 +57,15 @@
                 @endforeach
 
                 <tr>
-                    <th>Prenet fond za {{ config('loto.combination.find') }}:</th>
+                    <th>Prenet fond za {{ $configCombination['find'] }}:</th>
                     <td></td>
                     <td class="text-end">{{ number_format($report['fundIN'], 2) }}</td>
                 </tr>
 
                 <tr>
-                    <th>Ukupno fond za {{ config('loto.combination.find') }}:</th>
+                    <th>Ukupno fond za {{ $configCombination['find'] }}:</th>
                     <td></td>
-                    <td class="text-end">{{ number_format($report['wins']['funds'][config('loto.combination.find')] + $report['fundIN'], 2) }}</td>
+                    <td class="text-end">{{ number_format($report['wins']['funds'][$configCombination['find']] + $report['fundIN'], 2) }}</td>
                 </tr>
 
             </table>
@@ -69,7 +73,7 @@
 
         @isset($report['wins']['paids'])
             <div class="ticket col-md-4">
-                @for($i=1; $i<=config('loto.combination.from'); $i++)
+                @for($i=1; $i<=$configCombination['from']; $i++)
                     @if(in_array($i, $numbers))
                         <span class="bg-primary text-white">{{ $i }}</span>
                     @else
@@ -98,7 +102,7 @@
 
         @else
             <div class="ticket col-md-4">
-                @for($i=1; $i<=config('loto.combination.from'); $i++)
+                @for($i=1; $i<=$configCombination['from']; $i++)
                     <span>{{ $i }}</span>
                 @endfor
 

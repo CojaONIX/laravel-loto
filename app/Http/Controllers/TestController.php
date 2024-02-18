@@ -21,6 +21,7 @@ class TestController extends Controller
             'logged user with all',
             'logged user tickets',
             '2 latest',
+            'latest report'
 
         ]]);
     }
@@ -55,6 +56,9 @@ class TestController extends Controller
 
             case('2 latest'):
                 return Round::latest('id')->take(2)->get()[1];
+
+            case('latest report'):
+                return Round::latest('id')->first()->report;
 
 
             default:

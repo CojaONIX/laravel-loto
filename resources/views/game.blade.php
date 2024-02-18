@@ -21,8 +21,8 @@
 @section('content')
 
     <h3>Kredit: {{ $creditsSum }}</h3>
-    <h3>Kolo: {{ $nextRound['round'] }} - {{ count($tickets) }} tiketa</h3>
-    <h3>Vreme: {{ $nextRound['date'] }}</h3>
+    <h3>Kolo: {{ $nextRound->round }} - {{ count($tickets) }} tiketa</h3>
+    <h3>Vreme: {{ $nextRound->date }}</h3>
     @if($isPlayed)
         <h3>Odigrano: {{ $isPlayed->created_at }}</h3>
     @else
