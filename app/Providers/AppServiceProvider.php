@@ -12,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (!$this->app->isLocal()) {
+            $this->app['request']->server->set('HTTPS', true);
+        }
     }
 
     /**

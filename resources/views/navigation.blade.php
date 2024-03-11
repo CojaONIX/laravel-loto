@@ -10,21 +10,21 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('transactions.view') }}">Transactions</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('statistic.view') }}">Statistika</a></li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Other</a>
-                    <ul class="dropdown-menu">
+{{--                <li class="nav-item dropdown">--}}
+{{--                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Other</a>--}}
+{{--                    <ul class="dropdown-menu">--}}
 
-                        <li><hr class="dropdown-divider"></li>
+{{--                        <li><hr class="dropdown-divider"></li>--}}
 
-                        <li><a class="dropdown-item" href="{{ route('welcome.view') }}">Welcome</a></li>
-                    </ul>
-                </li>
+{{--                        <li><a class="dropdown-item" href="{{ route('welcome.view') }}">Welcome</a></li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
             </ul>
 
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="{{ route('test.view') }}">Test</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('admin.view') }}">Admin</a></li>
-            </ul>
+{{--            <ul class="navbar-nav me-auto mb-2 mb-lg-0">--}}
+{{--                <li class="nav-item"><a class="nav-link" href="{{ route('test.view') }}">Test</a></li>--}}
+{{--                <li class="nav-item"><a class="nav-link" href="{{ route('admin.view') }}">Admin</a></li>--}}
+{{--            </ul>--}}
 
             @auth
                 <div class="nav-item dropdown ms-3">
