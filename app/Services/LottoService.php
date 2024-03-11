@@ -71,7 +71,7 @@ class LottoService
 
         $lastRound = Round::latest('id')->first();
         $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
-        $report['fundOUT'] = 0;
+        $report['fundOUT'] = $report['fundIN'];
 
         if($counts)
         {
