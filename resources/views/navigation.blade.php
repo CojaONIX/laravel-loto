@@ -44,7 +44,7 @@
                     </ul>
                 </div>
             @else
-                <a href="/login" class="btn btn-outline-primary ms-3">Login</a>
+                <a href="{{ route('login') }}" class="btn btn-outline-primary ms-3">Login</a>
             @endauth
 
         </div>
