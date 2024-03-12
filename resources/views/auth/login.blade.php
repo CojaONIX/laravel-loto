@@ -4,13 +4,6 @@
 
 @section('content')
 
-<ul>
-    @foreach($users as $user)
-        <li>{{ $user->email }}</li>
-    @endforeach
-</ul>
-<hr>
-
 <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
     <div class="card">
         <div class="card-header">

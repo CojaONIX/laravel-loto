@@ -2,7 +2,7 @@
 
 return [
     'round' => [
-        'day' => 'Tuesday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+        'day' => 'Wednesday', // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
         'hour' => 12,
         'minute' => 0
     ],
