@@ -15,10 +15,25 @@ class NextRoundClass
     {
         $roundStartsAt = config('loto.round');
 
-        $firstYearRoundDate = new Carbon( "first {$roundStartsAt['day']} of January");
-        $firstYearRoundDate->addHours($roundStartsAt['hour'])->subHour()->addMinutes($roundStartsAt['minute']);
-        $this->round = $firstYearRoundDate->diffInWeeks(Carbon::now()) + 1 + 1;
-        $this->date = $firstYearRoundDate->addWeeks($this->round - 1)->addHour();
+        if($roundStartsAt['day'] == 'Everyday')
+        {
+            $firstYearRoundDate = Carbon::now()
+                                            ->firstOfYear()
+                                            ->hours($roundStartsAt['hour'])
+                                            ->subHour()
+                                            ->minutes($roundStartsAt['minute']);
+            $round = $firstYearRoundDate->diffInDays(Carbon::now()) + 1 + 1;
+            $this->date = $firstYearRoundDate->addDays($round - 1)->addHour();
+        }
+        else
+        {
+            $firstYearRoundDate = new Carbon( "first {$roundStartsAt['day']} of January");
+            $firstYearRoundDate->hours($roundStartsAt['hour'])->subHour()->minutes($roundStartsAt['minute']);
+            $round = $firstYearRoundDate->diffInWeeks(Carbon::now()) + 1 + 1;
+            $this->date = $firstYearRoundDate->addWeeks($round - 1)->addHour();
+        }
+
+        $this->round = $roundStartsAt['add'] + $round;
         $this->formated = $this->date->year . '-' . str_pad($this->round, 4, "0", STR_PAD_LEFT);
     }
 

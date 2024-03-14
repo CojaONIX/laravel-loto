@@ -2,9 +2,10 @@
 
 return [
     'round' => [
-        'day' => 'Tuesday', // '', Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+        'day' => 'Everyday', // 'Everyday', Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
         'hour' => 12,
-        'minute' => 0
+        'minute' => 0,
+        'add' => 1000
     ],
     'combination' => [
         'find' => 5,

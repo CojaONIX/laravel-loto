@@ -18,11 +18,6 @@ class GameController extends Controller
     public function index()
     {
         $creditsSum = Credit::where('user_id', Auth::id())->sum('amount');
-
-//        $nextRound = Lotto::nextRound();
-//        $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $nextRound['year-round']])->get();
-//        $isPlayed = Round::select('created_at')->where('round', $nextRound['year-round'])->first();
-
         $nextRound = new NextRoundClass();
         $tickets = User::find(Auth::id())->tickets()->select('numbers')->where(['round' => $nextRound->formated])->get();
         $isPlayed = Round::select('created_at')->where('round', $nextRound->formated)->first();
@@ -32,7 +27,8 @@ class GameController extends Controller
 
     public function addTicket(Request $request)
     {
-        $round = Lotto::nextRound()['year-round'];
+        $nextRound = new NextRoundClass();
+        $round = $nextRound->formated;
         $combination = config('loto.combination');
 
         $userCantPlayRound = Lotto::userCantPlayRound($round, $combination);

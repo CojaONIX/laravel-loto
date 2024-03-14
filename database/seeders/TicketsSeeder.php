@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\NextRoundClass;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use App\Models\Credit;
@@ -16,10 +16,10 @@ class TicketsSeeder extends Seeder
     public function run(): void
     {
         $time = Carbon::now();
-        $nextRound = Lotto::nextRound();
+        $nextRound = new NextRoundClass();
 
         $console = $this->command->getOutput();
-        $round = $console->ask('Za koje kolo zelite tikete?', $nextRound['round']);
+        $round = $console->ask('Za koje kolo zelite tikete?', $nextRound->round);
         $min = $console->ask('Minimalno tiketa po igracu?', 10);
         $max = $console->ask('Maximalno tiketa po igracu?', 20);
 
