@@ -13,9 +13,6 @@ use Throwable;
 
 class FakerUsersSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $console = $this->command->getOutput();
@@ -24,32 +21,16 @@ class FakerUsersSeeder extends Seeder
 
         $faker = Factory::create();
 
-//        $console->progressStart($amount);
-//        $count = 0;
-//        for($i=0; $i<$amount; $i++)
-//        {
-//            try {
-//                User::create([
-//                    "name" => $faker->name(),
-//                    "email" => $faker->unique()->safeEmail(),
-//                    "password" => Hash::make($password)
-//                ]);
-//                $count++;
-//            } catch (Throwable $e) {
-//            }
-//            $console->progressAdvance();
-//        }
-//        $console->progressFinish();
-
         $time = Carbon::now();
         $pass = Hash::make($password);
-        $users = array();
+        $users = [];
         for($i=0; $i<$amount; $i++)
         {
             $users[] = [
                 "name" => $faker->name(),
                 "email" => $faker->unique()->safeEmail(),
                 "password" => $pass,
+                'role' => 'fake',
                 'created_at' => $time,
                 'updated_at' => $time
             ];

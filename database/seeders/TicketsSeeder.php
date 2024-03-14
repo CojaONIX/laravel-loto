@@ -13,9 +13,6 @@ use Lotto;
 
 class TicketsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $time = Carbon::now();
@@ -27,7 +24,7 @@ class TicketsSeeder extends Seeder
         $max = $console->ask('Maximalno tiketa po igracu?', 20);
 
         $combination = config('loto.combination');
-        $users = User::select('id')->orderBy('id')->pluck('id');
+        $users = User::where(['role' => 'fake'])->select('id')->orderBy('id')->pluck('id');
         $ticketsSum = 0;
         foreach ($users as $user_id)
         {
@@ -39,28 +36,8 @@ class TicketsSeeder extends Seeder
                 'amount' => $ticketsCount * $combination['price']
             ]);
 
-            // 5 * 1000 tiketa -> 104 sec
-            // 5 * 100 tiketa -> 12 sec
-//            for($i=0; $i<$ticketsCount; $i++)
-//            {
-//                $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
-//
-//                Credit::create([
-//                    'user_id' => $user_id,
-//                    'type' => 2,
-//                    'amount' => -$combination['price'],
-//                ]);
-//
-//                Ticket::create([
-//                    'user_id' => $user_id,
-//                    'round' => '2024-' . str_pad($round, 4, "0", STR_PAD_LEFT),
-//                    'numbers' => $numbers
-//                ]);
-//
-//            }
-
-            $credits = array();
-            $tickets = array();
+            $credits = [];
+            $tickets = [];
             for($i=0; $i<$ticketsCount; $i++)
             {
                 $numbers = Arr::random(range(1, $combination['from']), $combination['find']);
