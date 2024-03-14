@@ -55,12 +55,17 @@ class LottoService
 
         $lastRound = Round::latest('id')->first();
         $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
-        $report['fundOUT'] = $report['fundIN'];
 
         if($counts)
         {
+            $report['fundOUT'] = 0;
             foreach($report['wins']['funds'] as $win => $fund)
             {
+                if($win == $configLotto['combination']['find'])
+                {
+                    $fund += $report['fundIN'];
+                }
+
                 if(isset($counts[$win]))
                 {
                     $report['wins']['counts'][$win] = $counts[$win];
@@ -78,46 +83,3 @@ class LottoService
         return $report;
     }
 }
-
-
-// $report
-//{
-//    "ticketsCount": 2,
-//    "ticketsValue": 200,
-//    "bank": {
-//      "percentage": 10,
-//      "fund": 20
-//  },
-//  "wins": {
-//        "percentages": {
-//          "3": 20,
-//          "4": 20,
-//          "5": 20,
-//          "6": 15,
-//          "7": 15
-//      },
-//      "funds": {
-//          "3": 40,
-//          "4": 40,
-//          "5": 40,
-//          "6": 30,
-//          "7": 30
-//      },
-//      "counts": {
-//          "3": 1,
-//          "4": 0,
-//          "5": 0,
-//          "6": 0,
-//          "7": 0
-//      },
-//      "paids": {
-//          "3": 40,
-//          "4": 0,
-//          "5": 0,
-//          "6": 0,
-//          "7": 0
-//      }
-//  },
-//  "fundIN": 0,
-//  "fundOUT": 140
-//}
