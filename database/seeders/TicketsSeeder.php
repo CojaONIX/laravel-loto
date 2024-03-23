@@ -24,7 +24,7 @@ class TicketsSeeder extends Seeder
         $max = $console->ask('Maximalno tiketa po igracu?', 20);
 
         $combination = config('loto.combination');
-        $users = User::where(['role' => 'fake'])->select('id')->orderBy('id')->pluck('id');
+        $users = User::where(['role' => User::ROLE_FAKE])->select('id')->orderBy('id')->pluck('id');
         $ticketsSum = 0;
         foreach ($users as $user_id)
         {

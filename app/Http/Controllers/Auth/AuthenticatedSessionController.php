@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        $users = User::where(['role' => 'fake'])->take(10)->get();
+        $users = User::where(['role' => User::ROLE_FAKE])->take(10)->get();
         return view('auth.login', compact('users'));
     }
 

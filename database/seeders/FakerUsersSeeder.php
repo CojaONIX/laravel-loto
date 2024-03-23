@@ -30,7 +30,7 @@ class FakerUsersSeeder extends Seeder
                 "name" => $faker->name(),
                 "email" => $faker->unique()->safeEmail(),
                 "password" => $pass,
-                'role' => 'fake',
+                'role' => User::ROLE_FAKE,
                 'created_at' => $time,
                 'updated_at' => $time
             ];
