@@ -23,7 +23,7 @@ class TransactionsController extends Controller
 
         Credit::create([
             'user_id' => Auth::id(),
-            'type' => 0,
+            'type' => Credit::TYPE_PUSH,
             'amount' => $request->get('amount')
         ]);
 
@@ -43,7 +43,7 @@ class TransactionsController extends Controller
 
         Credit::create([
             'user_id' => Auth::id(),
-            'type' => 1,
+            'type' => Credit::TYPE_PULL,
             'amount' => -$request->get('amount')
         ]);
 

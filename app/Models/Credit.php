@@ -9,6 +9,13 @@ class Credit extends Model
 {
     protected $table = 'credits';
 
+    const TYPE_PUSH = 0;
+    const TYPE_PULL = 1;
+    const TYPE_BET = 2;
+    const TYPE_WIN = 3;
+
+    const TYPES = ['push', 'pull', 'bet', 'win'];
+
     protected $fillable = [
         'user_id',
         'type',

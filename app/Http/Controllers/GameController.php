@@ -40,7 +40,7 @@ class GameController extends Controller
 
         Credit::create([
             'user_id' => Auth::id(),
-            'type' => 2,
+            'type' => Credit::TYPE_BET,
             'amount' => -$combination['price']
         ]);
 

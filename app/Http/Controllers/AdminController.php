@@ -45,7 +45,7 @@ class AdminController extends Controller
             if ($win >= $minWin) {
                 $winTickets[] = [
                     'user_id' => $ticket->user_id,
-                    'type' => 3,
+                    'type' => Credit::TYPE_WIN,
                     'amount' => $win
                 ];
             }
@@ -58,7 +58,7 @@ class AdminController extends Controller
 //                {
 //                    $winTickets[] = [
 //                        'user_id' => $ticket->user_id,
-//                        'type' => 3,
+//                        'type' => Credit::TYPE_WIN,
 //                        'amount' => $win
 //                    ];
 //                }

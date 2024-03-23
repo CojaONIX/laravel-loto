@@ -50,10 +50,10 @@
 
         @foreach($credits as $credit)
             <tr>
-                <th>{{ $credit->id }}</th>
-                <th>{{ $credit->type }}</th>
-                <th>{{ $credit->amount }}</th>
-                <th>{{ $credit->created_at }}</th>
+                <td>{{ $credit->id }}</td>
+                <td>{{ \App\Models\Credit::TYPES[$credit->type] }}</td>
+                <td class="text-end">{{ $credit->amount }}</td>
+                <td>{{ $credit->created_at }}</td>
             </tr>
         @endforeach
     </table>
