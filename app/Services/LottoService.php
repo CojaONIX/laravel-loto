@@ -13,7 +13,7 @@ class LottoService
 {
     public static function userCantPlayRound($round, $combination)
     {
-        $errors = array();
+        $errors = [];
         if(Credit::where('user_id', Auth::id())->sum('amount') < $combination['price'])
         {
             $errors[] = 'Nemate dovoljno kredita za uplatu tiketa!';
@@ -56,7 +56,7 @@ class LottoService
         $lastRound = Round::latest('id')->first();
         $report['fundIN'] = $lastRound ? $lastRound->fundOUT : 0;
 
-        if($counts)
+        if($counts !== null)
         {
             $report['fundOUT'] = 0;
             foreach($report['wins']['funds'] as $win => $fund)

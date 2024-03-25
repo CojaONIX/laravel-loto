@@ -36,7 +36,7 @@ class AdminController extends Controller
         $configLotto = config('loto');
         $numbers = Lotto::getRandomCombination($configLotto['combination']);
 
-        $winTickets = array();
+        $winTickets = [];
         $minWin = min(array_keys($configLotto['wins']['percentages']));
 
         $tickets = Ticket::where(['round' => $round])->select(['user_id', 'numbers'])->lazy();

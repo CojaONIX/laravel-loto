@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Credit;
 use Illuminate\Console\Command;
 
 class LotoCronTest extends Command
@@ -25,6 +26,11 @@ class LotoCronTest extends Command
      */
     public function handle()
     {
+        Credit::create([
+           'user_id' => 1,
+           'type' => 0,
+           'amount' => 10
+        ]);
         $this->info('bla bla');
     }
 }
