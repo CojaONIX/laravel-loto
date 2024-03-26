@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Lotto;
+use Illuminate\Support\Str;
 
 use App\Services\NextRoundClass;
 
@@ -48,6 +49,36 @@ class GameController extends Controller
             'user_id' => Auth::id(),
             'round' => $round,
             'numbers' => Lotto::getRandomCombination($combination)
+        ]);
+
+        return redirect()->route('game.view');
+    }
+
+    public function addCustomTicket(Request $request)
+    {
+        $numbers = Str::of($request->combination)->explode(',');
+
+        $nextRound = new NextRoundClass();
+        $round = $nextRound->formated;
+        $combination = config('loto.combination');
+
+        $userCantPlayRound = Lotto::userCantPlayRound($round, $combination);
+        if($userCantPlayRound)
+        {
+            return redirect()->route('game.view')->withErrors($userCantPlayRound);
+        }
+
+
+        Credit::create([
+            'user_id' => Auth::id(),
+            'type' => Credit::TYPE_BET,
+            'amount' => -$combination['price']
+        ]);
+
+        Ticket::create([
+            'user_id' => Auth::id(),
+            'round' => $round,
+            'numbers' => $numbers
         ]);
 
         return redirect()->route('game.view');

@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(GameController::class)->group(function () {
         Route::get('/game', 'index')->name('game.view');
         Route::post('/uplata-tiketa', 'addTicket')->name('game.ticket.add');
+        Route::post('/uplata-custom-tiketa', 'addCustomTicket')->name('game.ticket.custom.add');
     });
 
     Route::controller(TransactionsController::class)->group(function () {
