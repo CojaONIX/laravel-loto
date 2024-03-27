@@ -56,11 +56,23 @@ class GameController extends Controller
 
     public function addCustomTicket(Request $request)
     {
-        $numbers = Str::of($request->combination)->explode(',');
+        $combination = config('loto.combination');
+
+        $numbers = json_decode($request->combination);
+
+        if(!$numbers)
+        {
+            return redirect()->route('game.view')->withErrors('Wrong request.');
+        }
+
+        $numbers = array_unique($numbers);
+        if(!$numbers or count($numbers) != $combination['find'])
+        {
+            return redirect()->route('game.view')->withErrors('Wrong count of numbers.');
+        }
 
         $nextRound = new NextRoundClass();
         $round = $nextRound->formated;
-        $combination = config('loto.combination');
 
         $userCantPlayRound = Lotto::userCantPlayRound($round, $combination);
         if($userCantPlayRound)

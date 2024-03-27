@@ -60,7 +60,7 @@
                 <button id="btnRandomize" class="btn btn-outline-primary mx-2">R</button>
                 <form method="POST" action="{{ route('game.ticket.custom.add') }}">
                     @csrf
-                    <input type="hidden" id="numbers" name="combination">
+                    <input type="text" id="numbers" name="combination">
                     <button type="submit" id="btnOK" class="btn btn-primary" disabled>Bet</button>
                 </form>
             </div>
@@ -111,7 +111,7 @@
                     numbers.push(number);
                     $('#newTicket span').eq(number - 1).addClass('bg-primary text-white');
                 }
-                $('#numbers').val(numbers);
+                $('#numbers').val(JSON.stringify(numbers));
                 $('#btnOK').prop('disabled', false);
             });
 
