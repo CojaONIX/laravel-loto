@@ -60,7 +60,7 @@
                 <button id="btnRandomize" class="btn btn-outline-primary mx-2">R</button>
                 <form method="POST" action="{{ route('game.ticket.custom.add') }}">
                     @csrf
-                    <input type="text" id="numbers" name="combination">
+                    <input type="hidden" id="numbers" name="combination">
                     <button type="submit" id="btnOK" class="btn btn-primary" disabled>Bet</button>
                 </form>
             </div>
