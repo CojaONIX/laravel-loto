@@ -118,7 +118,7 @@
             $('#btnClear').click(function(){
                 numbers = [];
                 $('#newTicket span').removeClass('bg-primary text-white');
-                $('#numbers').val(numbers);
+                $('#numbers').val(JSON.stringify(numbers));
                 $('#btnOK').prop('disabled', true);
             });
 
@@ -135,7 +135,7 @@
                     }
 
                 }
-                $('#numbers').val(numbers);
+                $('#numbers').val(JSON.stringify(numbers));
                 $('#btnOK').prop('disabled', numbers.length != {{ config('loto.combination')['find'] }});
 
             });

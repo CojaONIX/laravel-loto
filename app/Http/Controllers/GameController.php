@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Lotto;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\Validator;
+
 use App\Services\NextRoundClass;
 
 class GameController extends Controller
@@ -60,12 +62,22 @@ class GameController extends Controller
 
         $numbers = json_decode($request->combination);
 
-        if(!$numbers)
+        if($numbers === null)
         {
             return redirect()->route('game.view')->withErrors('Wrong request.');
         }
 
         $numbers = array_unique($numbers);
+
+        $validator = Validator::make(['numbers' => $numbers], [
+            'numbers' => 'required|size:'  . $combination['find'],
+            'numbers.*' => 'required|numeric|between:1,' . $combination['from'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
         if(!$numbers or count($numbers) != $combination['find'])
         {
             return redirect()->route('game.view')->withErrors('Wrong count of numbers.');
