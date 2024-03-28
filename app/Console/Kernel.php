@@ -13,9 +13,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-        $nextRound = new NextRoundClass();
-        $schedule->command('loto:roll')->dailyAt($nextRound->timeSubHour);
+        //$schedule->command('inspire')->hourly();
+        $schedule->command('loto:roll')->dailyAt('13:00');
     }
 
     /**

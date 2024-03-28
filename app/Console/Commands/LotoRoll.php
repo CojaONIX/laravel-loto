@@ -31,7 +31,7 @@ class LotoRoll extends Command
     public function handle()
     {
         $round = new NextRoundClass();
-        $round = $round->formated;
+        $round = $round->roundRoll;
 
         $configLotto = config('loto');
         $numbers = Lotto::getRandomCombination($configLotto['combination']);
