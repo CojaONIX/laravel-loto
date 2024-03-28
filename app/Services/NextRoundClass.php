@@ -32,7 +32,6 @@ class NextRoundClass
         $this->formated = $this->date->year . '-' . str_pad($this->round, 4, "0", STR_PAD_LEFT);
         $this->roundRoll = $this->date->year . '-' . str_pad($this->round - 1, 4, "0", STR_PAD_LEFT);
 
-        dd($this);
     }
 
 }
