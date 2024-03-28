@@ -3,7 +3,7 @@
 return [
     'round' => [
         'day' => 'Everyday', // 'Everyday', Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-        'hour' => 12,
+        'hour' => 13,
         'minute' => 0,
         'add' => 1000
     ],
