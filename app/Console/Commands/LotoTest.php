@@ -3,16 +3,17 @@
 namespace App\Console\Commands;
 
 use App\Models\Credit;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class LotoCronTest extends Command
+class LotoTest extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'loto:cron-test';
+    protected $signature = 'loto:test';
 
     /**
      * The console command description.
@@ -26,11 +27,14 @@ class LotoCronTest extends Command
      */
     public function handle()
     {
-        Credit::create([
-           'user_id' => 1,
-           'type' => 0,
-           'amount' => 10
-        ]);
-        $this->info('bla bla');
+        $date = Carbon::create(2024, 12, 26, 13,0,0, 'Europe/Belgrade');
+
+        for($i=0; $i<15; $i++)
+        {
+            $date->addDay();
+            $this->info($date . " --- " . $date->weekOfYear . " --- " . (int) (($date->dayOfYear - 1) / 7) + 1);
+        }
+
+
     }
 }
